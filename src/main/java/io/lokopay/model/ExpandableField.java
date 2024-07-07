@@ -3,10 +3,10 @@ package io.lokopay.model;
 
 import io.lokopay.net.ResponseGetter;
 
-// This class is meant to be used for expandable fields in the Stripe API.
+// This class is meant to be used for expandable fields in the Loko API.
 // For example, ExpandableField<BalanceTransaction> in Charge.
 // The class should always contain a String id, and may have a null or type T expandedObject.
-// More info here: https://stripe.com/docs/api#expanding_objects
+// More info here: https://Loko.com/docs/api#expanding_objects
 public class ExpandableField<T extends HasId> implements LokoActiveObject {
   private String id;
   private T expandedObject;

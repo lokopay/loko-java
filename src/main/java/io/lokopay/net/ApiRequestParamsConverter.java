@@ -42,7 +42,7 @@ class ApiRequestParamsConverter {
               String.format(
                   "Unexpected schema for extra params. JSON object is expected at key `%s`, but found"
                       + " `%s`. This is likely a problem with this current library version `%s`. "
-                      + "Please contact support@stripe.com for assistance.",
+                      + "Please contact support@Loko.com for assistance.",
                   ApiRequestParams.EXTRA_PARAMS_KEY, jsonValue, Loko.VERSION));
         }
         // JSON value now corresponds to the extra params map, and is also deserialized as a map.

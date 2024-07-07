@@ -40,8 +40,8 @@ import java.util.Optional;
  *   Event event = Webhook.constructEvent(payload, sigHeader, secret);
  *   EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
  *   if (dataObjectDeserializer.getObject().isPresent()) {
- *     LokoObject stripeObject = dataObjectDeserializer.getObject().get();
- *     doSomething(stripeObject);
+ *     LokoObject LokoObject = dataObjectDeserializer.getObject().get();
+ *     doSomething(LokoObject);
  *   } else {
  *     throw new IllegalStateException(
  *       String.format("Unable to deserialize event data object for %s", event));
@@ -79,7 +79,7 @@ public class EventDataObjectDeserializer {
    * LokoObject}) schema. This is when {@link Event#getApiVersion()} matches {@link
    * Loko#API_VERSION}. Otherwise, the optional is empty.
    *
-   * @return {@code Optional} of stripe object when deserialization is safe.
+   * @return {@code Optional} of Loko object when deserialization is safe.
    */
   public Optional<LokoObject> getObject() {
     if (object != null) {
@@ -155,7 +155,7 @@ public class EventDataObjectDeserializer {
       if (!apiVersionMatch()) {
         errorMessage =
             String.format(
-                "Current `stripe-java` integration has Loko API version %s, but the event data "
+                "Current `Loko-java` integration has Loko API version %s, but the event data "
                     + "object has %s. The JSON data might have schema not compatible with the "
                     + "current model classes; such incompatibility can be the cause of "
                     + "deserialization failure. "
@@ -173,7 +173,7 @@ public class EventDataObjectDeserializer {
         errorMessage =
             String.format(
                 "Unable to deserialize event data object to respective Loko "
-                    + "object. Please see the raw JSON, and contact support@stripe.com for "
+                    + "object. Please see the raw JSON, and contact support@Loko.com for "
                     + "assistance. Original error message: %s",
                 e.getMessage());
       }

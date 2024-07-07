@@ -13,10 +13,13 @@ public class LokoClient {
 //                new LokoResponseGetter(builder().setApiKey(apiKey).buildOptions(), null);
 //    }
 
-    public LokoClient(String apiSecretKey, String apiPublishKey) {
+    public LokoClient(Boolean liveMode, String apiSecretKey, String apiPublishKey) {
         this.responseGetter =
                 new LokoResponseGetter(
-                        builder().setApiSecretKey(apiSecretKey).setApiPublicKey(apiPublishKey).buildOptions(),
+                        builder(liveMode)
+                                .setApiSecretKey(apiSecretKey)
+                                .setApiPublicKey(apiPublishKey)
+                                .buildOptions(),
                         null
                 );
     }
@@ -34,17 +37,17 @@ public class LokoClient {
         return new io.lokopay.service.PaymentService(this.responseGetter);
     }
 
-    static class ClientLokoResponseGetterOptions extends LokoResponseGetterOptions {
+    public io.lokopay.service.PayoutService payouts() {
+        return new io.lokopay.service.PayoutService(this.responseGetter);
+    }
 
-//        @Getter(onMethod_ = {@Override})
-//        private final String apiKey;
+    static class ClientLokoResponseGetterOptions extends LokoResponseGetterOptions {
 
         @Getter(onMethod_ = {@Override})
         private final String apiSecretKey;
 
         @Getter(onMethod_ = {@Override})
         private final String apiPublicKey;
-
 
         @Getter(onMethod_ = {@Override})
         private final int connectTimeout;
@@ -83,31 +86,30 @@ public class LokoClient {
 
     }
 
-    public static LokoClientBuilder builder() {
-        return new LokoClientBuilder();
+    public static LokoClientBuilder builder(Boolean liveMode) {
+        return new LokoClientBuilder(liveMode);
     }
 
     public static final class LokoClientBuilder {
-        //        private String apiKey;
+
+
         @Getter
         private String apiSecretKey;
         @Getter
         private String apiPublicKey;
+        @Getter
+        private Boolean liveMode;
 
         private int connectTimeout = Loko.DEFAULT_CONNECTION_TIMEOUT;
         private int readTimeout = Loko.DEFAULT_READ_TIMEOUT;
         private int maxNetworkRetries;
-        private String apiBase = Loko.LIVE_API_BASE;
+        private String apiBase;  //= Loko.getApiBase();
         private String connectBase = Loko.CONNECT_API_BASE;
 
-        public LokoClientBuilder () {}
-
-//        public String getApiKey() { return this.apiKey; }
-//
-//        public LokoClientBuilder setApiKey(String apiKey) {
-//            this.apiKey = apiKey;
-//            return this;
-//        }
+        public LokoClientBuilder (Boolean liveMode) {
+            this.liveMode = liveMode;
+            this.apiBase = this.liveMode ? Loko.LIVE_API_BASE : Loko.TEST_API_BASE;
+        }
 
         public LokoClientBuilder setApiSecretKey(String apiSecretKey) {
             this.apiSecretKey = apiSecretKey;

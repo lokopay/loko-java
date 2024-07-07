@@ -24,8 +24,8 @@ public class BlockchainTransaction extends ApiResource implements HasId, Metadat
     @SerializedName("currency")
     String currency;
 
-    @SerializedName("address")
-    String address;
+    @SerializedName("destination_address")
+    String destinationAddress;
 
     @SerializedName("tx_hash")
     String txHash;

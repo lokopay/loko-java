@@ -32,6 +32,10 @@ public class PayoutCreateParams extends ApiRequestParams {
         this.customer = customer;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private String amount;
 
@@ -40,7 +44,6 @@ public class PayoutCreateParams extends ApiRequestParams {
         private String description;
 
         private Customer customer;
-
 
         public PayoutCreateParams build() {
             return new PayoutCreateParams(

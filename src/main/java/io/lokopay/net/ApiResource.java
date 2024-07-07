@@ -58,7 +58,7 @@ public abstract class ApiResource extends LokoObject implements LokoActiveObject
 //                        .registerTypeAdapter(Event.Request.class, new EventRequestDeserializer())
                         .registerTypeAdapter(ExpandableField.class, new ExpandableFieldDeserializer())
                         .registerTypeAdapter(LokoRawJsonObject.class, new LokoRawJsonObjectDeserializer())
-//                        .registerTypeAdapterFactory(new StripeCollectionItemTypeSettingFactory())
+//                        .registerTypeAdapterFactory(new LokoCollectionItemTypeSettingFactory())
                         .addReflectionAccessFilter(
                                 new ReflectionAccessFilter() {
                                     @Override
@@ -111,10 +111,10 @@ public abstract class ApiResource extends LokoObject implements LokoActiveObject
         if (id == null) {
             throw new InvalidRequestException(
                     "Invalid null ID found for url path formatting. This can be because your string ID "
-                            + "argument to the API method is null, or the ID field in your stripe object "
-                            + "instance is null. Please contact support@stripe.com on the latter case. ",
-                    null,
-                    null,
+                            + "argument to the API method is null, or the ID field in your Loko object "
+                            + "instance is null. Please contact support@Loko.com on the latter case. ",
+
+//                    null,
                     null,
                     0,
                     null);

@@ -1,11 +1,11 @@
 package io.lokopay.net;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import io.lokopay.Loko;
-import io.lokopay.exception.ApiConnectionException;
-import io.lokopay.exception.ApiException;
-import io.lokopay.exception.LokoException;
+import io.lokopay.exception.*;
 import io.lokopay.model.LokoCollectionInterface;
+import io.lokopay.model.LokoError;
 import io.lokopay.model.LokoObjectInterface;
 import io.lokopay.util.Stopwatch;
 
@@ -28,9 +28,8 @@ public class LokoResponseGetter implements ResponseGetter {
     }
 
     public LokoResponseGetter(LokoResponseGetterOptions options, HttpClient httpClient) {
-        this.options = options; //!= null ? options : GlobalLokoResponseGetterOptions.INSTANCE;
+        this.options = options != null ? options : GlobalLokoResponseGetterOptions.INSTANCE;
         this.httpClient = (httpClient != null) ? httpClient : buildDefaultHttpClient();
-
     }
 
     private LokoRequest toLokoRequest(ApiRequest apiRequest, RequestOptions mergedOptions)
@@ -49,7 +48,8 @@ public class LokoResponseGetter implements ResponseGetter {
         RequestOptions mergedOptions = RequestOptions.merge(this.options, apiRequest.getOptions());
 
         LokoRequest request = toLokoRequest(apiRequest, mergedOptions);
-        LokoResponse response = sendWithTelemetry(request, apiRequest.getUsage(), r -> httpClient.requestWithRetries(r));
+        LokoResponse response =
+                sendWithTelemetry(request, apiRequest.getUsage(), r -> httpClient.requestWithRetries(r));
 
         int responseCode = response.code();
         String responseBody = (String) response.body();
@@ -171,7 +171,8 @@ public class LokoResponseGetter implements ResponseGetter {
     }
 
     private static void raiseMalformedJsonError(
-            String responseBody, int responseCode,
+            String responseBody,
+            int responseCode,
 //            String requestId,
             Throwable e) throws ApiException {
         String details = e == null ? "none" : e.getMessage();
@@ -191,53 +192,61 @@ public class LokoResponseGetter implements ResponseGetter {
 //        } else if (apiMode == ApiMode.OAuth) {
 //            handleOAuthError(response);
 //        }
-
+        handleApiError(response);
         System.out.println("handleError: " + response);
 
     }
 
     private void handleApiError(LokoResponse response) throws LokoException {
-//        LokoError error = null;
-//        StripeException exception = null;
-//
-//        try {
-//            JsonObject jsonObject =
-//                    ApiResource.INTERNAL_GSON
-//                            .fromJson(response.body(), JsonObject.class)
+        LokoError error = null;
+        LokoException exception = null;
+
+        try {
+            JsonObject jsonObject =
+                    ApiResource.INTERNAL_GSON
+                            .fromJson((String)response.body(),
+                                    JsonObject.class);
 //                            .getAsJsonObject("error");
-//            error = ApiResource.deserializeStripeObject(jsonObject.toString(), StripeError.class, this);
-//        } catch (JsonSyntaxException e) {
-//            raiseMalformedJsonError(response.body(), response.code(), response.requestId(), e);
-//        }
-//        if (error == null) {
-//            raiseMalformedJsonError(response.body(), response.code(), response.requestId(), null);
-//        }
-//
-//        error.setLastResponse(response);
-//
-//        switch (response.code()) {
-//            case 400:
-//            case 404:
-//                if ("idempotency_error".equals(error.getType())) {
-//                    exception =
-//                            new IdempotencyException(
-//                                    error.getMessage(), response.requestId(), error.getCode(), response.code());
-//                } else {
-//                    exception =
-//                            new InvalidRequestException(
-//                                    error.getMessage(),
+            error =
+                    ApiResource.deserializeLokoObject(
+                            jsonObject.toString(),
+                            LokoError.class,
+                            this);
+
+        } catch (JsonSyntaxException e) {
+            raiseMalformedJsonError(
+                    (String) response.body(), response.code(),  e);
+        }
+        if (error == null) {
+            raiseMalformedJsonError(
+                    (String) response.body(), response.code(), null);
+        }
+
+        error.setLastResponse(response);
+
+        switch (response.code()) {
+            case 400:
+            case 404:
+                if ("idempotency_error".equals(error.getType())) {
+                    exception =
+                            new IdempotencyException(
+                                    error.getMessage(), error.getCode(), response.code());
+                } else {
+                    exception =
+                            new InvalidRequestException(
+                                    error.getMessage(),
 //                                    error.getParam(),
 //                                    response.requestId(),
-//                                    error.getCode(),
-//                                    response.code(),
-//                                    null);
-//                }
-//                break;
-//            case 401:
-//                exception =
-//                        new AuthenticationException(
-//                                error.getMessage(), response.requestId(), error.getCode(), response.code());
-//                break;
+                                    error.getCode(),
+                                    response.code(),
+                                    null);
+                }
+                break;
+            case 401:
+                exception =
+                        new AuthenticationException(
+                                error.getMessage(),  error.getCode(), response.code());
+                break;
 //            case 402:
 //                exception =
 //                        new CardException(
@@ -265,16 +274,19 @@ public class LokoResponseGetter implements ResponseGetter {
 //                                response.code(),
 //                                null);
 //                break;
-//            default:
-//                exception =
-//                        new ApiException(
-//                                error.getMessage(), response.requestId(), error.getCode(), response.code(), null);
-//                break;
-//        }
-//
-//        exception.setStripeError(error);
+            default:
+                exception =
+                        new ApiException(
+                                error.getMessage(),
+                                error.getCode(),
+                                response.code(),
+                                null);
+                break;
+        }
 
-//        throw exception;
+        exception.setLokoError(error);
+
+        throw exception;
     }
 
     private static HttpClient buildDefaultHttpClient() {

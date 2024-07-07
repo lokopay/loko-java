@@ -50,8 +50,8 @@ public class HttpURLConnectionClient extends HttpClient {
           String.format(
               "IOException during API request to Loko (%s): %s "
                   + "Please check your internet connection and try again. If this problem persists,"
-                  + "you should check Loko's service status at https://twitter.com/stripestatus,"
-                  + " or let us know at support@stripe.com.",
+                  + "you should check Loko's service status at https://twitter.com/Lokostatus,"
+                  + " or let us know at support@Loko.com.",
               Loko.getApiBase(), e.getMessage()),
           e);
     }

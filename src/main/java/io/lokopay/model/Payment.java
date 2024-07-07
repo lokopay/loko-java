@@ -55,6 +55,9 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
     @SerializedName("currency_received")
     String currencyReceived;
 
+    @SerializedName("supported_cryptocurrencies")
+    List<CryptoCurrency> supportedCryptocurrencies;
+
     @SerializedName("blockchain_transaction_details")
 //    @Getter(lombok.AccessLevel.NONE)
 //    @Setter(lombok.AccessLevel.NONE)
@@ -71,9 +74,6 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
 
     @SerializedName("created_at")
     Long createdAt;
-
-    @SerializedName("supported_cryptocurrencies")
-    List<CryptoCurrency> supportedCryptocurrencies;
 
     @Getter(onMethod_ = {@Override})
     @SerializedName("metadata")

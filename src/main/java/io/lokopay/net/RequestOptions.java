@@ -50,8 +50,8 @@ public class RequestOptions {
 //                    clientOptions.getApiKey(), // authenticator
                     // clientOptions.getClientId(), // clientId
                     null, // idempotencyKey
-                    // null, // stripeAccount
-                    // null, // stripeVersionOverride
+                    // null, // LokoAccount
+                    // null, // LokoVersionOverride
                     null, // baseUrl
                     clientOptions.getConnectTimeout(), // connectTimeout
                     clientOptions.getReadTimeout(), // readTimeout
@@ -66,8 +66,8 @@ public class RequestOptions {
                 options.getApiSecretKey() != null ? options.getApiSecretKey() : clientOptions.getApiSecretKey(),
                 options.getApiPublicKey() != null ? options.getApiPublicKey() : clientOptions.getApiPublicKey(),
                 options.getIdempotencyKey(),
-//                options.getStripeAccount(),
-//                RequestOptions.unsafeGetStripeVersionOverride(options),
+//                options.getLokoAccount(),
+//                RequestOptions.unsafeGetLokoVersionOverride(options),
                 options.getBaseUrl(),
                 options.getConnectTimeout() != null
                         ? options.getConnectTimeout()

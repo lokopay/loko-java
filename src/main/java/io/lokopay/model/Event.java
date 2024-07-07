@@ -27,20 +27,20 @@ import java.util.Map;
  * contains a charge, and an {@code invoice.payment_failed} event contains an invoice.
  *
  * <p>As with other API resources, you can use endpoints to retrieve an <a
- * href="https://stripe.com/docs/api#retrieve_event">individual event</a> or a <a
- * href="https://stripe.com/docs/api#list_events">list of events</a> from the API. We also have a
+ * href="https://Loko.com/docs/api#retrieve_event">individual event</a> or a <a
+ * href="https://Loko.com/docs/api#list_events">list of events</a> from the API. We also have a
  * separate <a href="http://en.wikipedia.org/wiki/Webhook">webhooks</a> system for sending the
  * {@code Event} objects directly to an endpoint on your server. You can manage webhooks in your <a
- * href="https://dashboard.stripe.com/account/webhooks">account settings</a>. Learn how to <a
- * href="https://docs.stripe.com/webhooks">listen for events</a> so that your integration can
+ * href="https://dashboard.Loko.com/account/webhooks">account settings</a>. Learn how to <a
+ * href="https://docs.Loko.com/webhooks">listen for events</a> so that your integration can
  * automatically trigger reactions.
  *
- * <p>When using <a href="https://docs.stripe.com/connect">Connect</a>, you can also receive event
+ * <p>When using <a href="https://docs.Loko.com/connect">Connect</a>, you can also receive event
  * notifications that occur in connected accounts. For these events, there's an additional {@code
  * account} attribute in the received {@code Event} object.
  *
  * <p>We only guarantee access to events through the <a
- * href="https://stripe.com/docs/api#retrieve_event">Retrieve Event API</a> for 30 days.
+ * href="https://Loko.com/docs/api#retrieve_event">Retrieve Event API</a> for 30 days.
  */
 @Getter
 @Setter
@@ -209,7 +209,7 @@ public class Event extends ApiResource implements HasId {
   /**
    * List events, going back up to 30 days. Each event data is rendered according to Loko API
    * version at its creation time, specified in <a
-   * href="https://docs.stripe.com/api/events/object">event object</a> {@code api_version} attribute
+   * href="https://docs.Loko.com/api/events/object">event object</a> {@code api_version} attribute
    * (not according to your current Loko API version or {@code Loko-Version} header).
    */
   public static EventCollection list(Map<String, Object> params) throws LokoException {
@@ -219,7 +219,7 @@ public class Event extends ApiResource implements HasId {
   /**
    * List events, going back up to 30 days. Each event data is rendered according to Loko API
    * version at its creation time, specified in <a
-   * href="https://docs.stripe.com/api/events/object">event object</a> {@code api_version} attribute
+   * href="https://docs.Loko.com/api/events/object">event object</a> {@code api_version} attribute
    * (not according to your current Loko API version or {@code Loko-Version} header).
    */
   public static EventCollection list(Map<String, Object> params, RequestOptions options)
@@ -234,7 +234,7 @@ public class Event extends ApiResource implements HasId {
   /**
    * List events, going back up to 30 days. Each event data is rendered according to Loko API
    * version at its creation time, specified in <a
-   * href="https://docs.stripe.com/api/events/object">event object</a> {@code api_version} attribute
+   * href="https://docs.Loko.com/api/events/object">event object</a> {@code api_version} attribute
    * (not according to your current Loko API version or {@code Loko-Version} header).
    */
   public static EventCollection list(EventListParams params) throws LokoException {
@@ -244,7 +244,7 @@ public class Event extends ApiResource implements HasId {
   /**
    * List events, going back up to 30 days. Each event data is rendered according to Loko API
    * version at its creation time, specified in <a
-   * href="https://docs.stripe.com/api/events/object">event object</a> {@code api_version} attribute
+   * href="https://docs.Loko.com/api/events/object">event object</a> {@code api_version} attribute
    * (not according to your current Loko API version or {@code Loko-Version} header).
    */
   public static EventCollection list(EventListParams params, RequestOptions options)
@@ -319,12 +319,12 @@ public class Event extends ApiResource implements HasId {
    * <pre>
    *   Event event = getEvent(); // either from webhook or event endpoint
    *   EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
-   *   Optional&lt;LokoObject&gt; stripeObject = deserializer.getObject();
+   *   Optional&lt;LokoObject&gt; LokoObject = deserializer.getObject();
    * </pre>
    *
    * You can ensure that webhook events has the same API version by creating webhook endpoint
-   * specifying api version](https://stripe.com/docs/api/webhook_endpoints/create) as {@link
-   * com.stripe.Loko#API_VERSION}. For reading from old webhook endpoints or old events with
+   * specifying api version](https://Loko.com/docs/api/webhook_endpoints/create) as {@link
+   * com.Loko.Loko#API_VERSION}. For reading from old webhook endpoints or old events with
    * potential schema incompatibility, see {@link EventDataObjectDeserializer#deserialize()} and
    * {@link EventDataObjectDeserializer#deserializeUnsafe()}.
    */
@@ -380,7 +380,7 @@ public class Event extends ApiResource implements HasId {
     /**
      * ID of the API request that caused the event. If null, the event was automatic (e.g., Loko's
      * automatic subscription handling). Request logs are available in the <a
-     * href="https://dashboard.stripe.com/logs">dashboard</a>, but currently not in the API.
+     * href="https://dashboard.Loko.com/logs">dashboard</a>, but currently not in the API.
      */
     @Getter(onMethod_ = {@Override})
     @SerializedName("id")

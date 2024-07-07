@@ -9,5 +9,8 @@ public class EventDataClassLookup {
     static {
         classLookup.put("payment", Payment.class);
         classLookup.put("payout", Payout.class);
+        classLookup.put("error", LokoError.class);
+        classLookup.put("destination_network_details", BlockchainNetwork.class);
+        classLookup.put("blockchain_transaction_details", BlockchainTransaction.class);
     }
 }

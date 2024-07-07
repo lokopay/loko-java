@@ -48,12 +48,12 @@ abstract class AbstractLokoResponse<T> {
     }
 
     public String idempotencyKey() {
-        return this.headers.firstValue("Idempotency-Key").orElse(null);
+        return this.headers.firstValue("loko-idempotency-Key").orElse(null);
     }
 
-    public String requestId() {
-        return this.headers.firstValue("Request-Id").orElse(null);
-    }
+//    public String requestId() {
+//        return this.headers.firstValue("Request-Id").orElse(null);
+//    }
 
     protected AbstractLokoResponse(int code, HttpHeaders headers, T body) {
         requireNonNull(headers);

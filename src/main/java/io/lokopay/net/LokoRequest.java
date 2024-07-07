@@ -63,8 +63,6 @@ public class LokoRequest {
             this.signature = buildSignature(method, this.url.toString(), this.params, this.nonce, this.timestamp, this.options);
             this.headers = buildHeaders(method, this.options, this.signature, this.timestamp, this.nonce);
 
-            System.out.println(signature);
-
         } catch (NoSuchAlgorithmException | InvalidKeyException | IOException e) {
             throw new ApiConnectionException(
                     String.format(
@@ -125,8 +123,6 @@ public class LokoRequest {
         headerMap.put("Accept", Arrays.asList("application/json"));
         headerMap.put("Accept-Charset", Arrays.asList(ApiResource.CHARSET.name()));
 
-
-
         String publicKey = options.getApiPublicKey();
         if (publicKey == null) {
 
@@ -180,9 +176,6 @@ public class LokoRequest {
         }
 
         String data = url + content + nonce + timestamp;
-
-        System.out.println(data);
-        System.out.println(options.getApiSecretKey());
 
         Mac mac = Mac.getInstance("HmacSHA256");
         SecretKeySpec secretKeySpec = new SecretKeySpec(options.getApiSecretKey().getBytes(), "HmacSHA256");

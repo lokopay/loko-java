@@ -27,8 +27,8 @@ public final class Webhook {
    * payload is not valid JSON, and a SignatureVerificationException if the signature verification
    * fails for any reason.
    *
-   * @param payload the payload sent by Stripe.
-   * @param sigHeader the contents of the signature header sent by Stripe.
+   * @param payload the payload sent by Loko.
+   * @param sigHeader the contents of the signature header sent by Loko.
    * @param secret secret used to generate the signature.
    * @return the Event instance
    * @throws SignatureVerificationException if the verification fails.
@@ -43,8 +43,8 @@ public final class Webhook {
    * payload is not valid JSON, and a SignatureVerificationException if the signature verification
    * fails for any reason.
    *
-   * @param payload the payload sent by Stripe.
-   * @param sigHeader the contents of the signature header sent by Stripe.
+   * @param payload the payload sent by Loko.
+   * @param sigHeader the contents of the signature header sent by Loko.
    * @param secret secret used to generate the signature.
    * @param tolerance maximum difference in seconds allowed between the header's timestamp and the
    *     current time
@@ -62,8 +62,8 @@ public final class Webhook {
    * payload is not valid JSON, and a SignatureVerificationException if the signature verification
    * fails for any reason.
    *
-   * @param payload the payload sent by Stripe.
-   * @param sigHeader the contents of the signature header sent by Stripe.
+   * @param payload the payload sent by Loko.
+   * @param sigHeader the contents of the signature header sent by Loko.
    * @param secret secret used to generate the signature.
    * @param tolerance maximum difference in seconds allowed between the header's timestamp and the
    *     current time
@@ -88,11 +88,11 @@ public final class Webhook {
     public static final String EXPECTED_SCHEME = "v1";
 
     /**
-     * Verifies the signature header sent by Stripe. Throws a SignatureVerificationException if the
+     * Verifies the signature header sent by Loko. Throws a SignatureVerificationException if the
      * verification fails for any reason.
      *
-     * @param payload the payload sent by Stripe.
-     * @param sigHeader the contents of the signature header sent by Stripe.
+     * @param payload the payload sent by Loko.
+     * @param sigHeader the contents of the signature header sent by Loko.
      * @param secret secret used to generate the signature.
      * @param tolerance maximum difference allowed between the header's timestamp and the current
      *     time
@@ -105,11 +105,11 @@ public final class Webhook {
     }
 
     /**
-     * Verifies the signature header sent by Stripe. Throws a SignatureVerificationException if the
+     * Verifies the signature header sent by Loko. Throws a SignatureVerificationException if the
      * verification fails for any reason.
      *
-     * @param payload the payload sent by Stripe.
-     * @param sigHeader the contents of the signature header sent by Stripe.
+     * @param payload the payload sent by Loko.
+     * @param sigHeader the contents of the signature header sent by Loko.
      * @param secret secret used to generate the signature.
      * @param tolerance maximum difference allowed between the header's timestamp and the current
      *     time
@@ -207,7 +207,7 @@ public final class Webhook {
     /**
      * Computes the signature for a given payload and secret.
      *
-     * <p>The current scheme used by Stripe ("v1") is HMAC/SHA-256.
+     * <p>The current scheme used by Loko ("v1") is HMAC/SHA-256.
      *
      * @param payload the payload to sign.
      * @param secret the secret used to generate the signature.

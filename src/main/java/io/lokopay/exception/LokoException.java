@@ -1,5 +1,6 @@
 package io.lokopay.exception;
 
+import io.lokopay.model.LokoError;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,7 @@ public class LokoException extends Exception{
     /** The error resource returned by Loko's API that caused the exception. */
     // transient so the exception can be serialized, as LokoObject does not
     // implement Serializable
-//    @Setter
-//    transient LokoError lokoError;
+    @Setter transient LokoError lokoError;
 
     /**
      * Returns the error code of the response that triggered this exception. For {@link ApiException}
