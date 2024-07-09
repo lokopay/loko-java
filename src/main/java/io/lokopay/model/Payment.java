@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class Payment extends ApiResource implements MetadataStore<Payment>, HasId {
+public class Payment extends ApiResource implements HasId { //MetadataStore<Payment>,
 
 //    @Getter(onMethod_ = {@Override})
     @SerializedName("id")
@@ -22,6 +22,9 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
 
     @SerializedName("object")
     String object;
+
+    @SerializedName("object_secret")
+    String objectSecret;
 
     @SerializedName("amount")
     String amount;
@@ -49,11 +52,11 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
     @SerializedName("currency_due_address")
     String currencyDueAddress;
 
-    @SerializedName("amount_received")
-    String amountReceived;
+    @SerializedName("amount_paid")
+    String amountPaid;
 
-    @SerializedName("currency_received")
-    String currencyReceived;
+    @SerializedName("currency_paid")
+    String currencyPaid;
 
     @SerializedName("supported_cryptocurrencies")
     List<CryptoCurrency> supportedCryptocurrencies;
@@ -63,11 +66,14 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
 //    @Setter(lombok.AccessLevel.NONE)
     List<BlockchainTransaction> blockchainTransactionDetails;
 
-    @SerializedName("obj_secret")
-    String objSecret;
+    @SerializedName("failed_reason")
+    String failedReason;
 
     @SerializedName("status")
     String status;
+
+    @SerializedName("price_expires_at")
+    Long priceExpiresAt;
 
     @SerializedName("expires_at")
     Long expiresAt;
@@ -75,9 +81,9 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
     @SerializedName("created_at")
     Long createdAt;
 
-    @Getter(onMethod_ = {@Override})
-    @SerializedName("metadata")
-    Map<String, String> metadata;
+//    @Getter(onMethod_ = {@Override})
+//    @SerializedName("metadata")
+//    Map<String, String> metadata;
 
     /** Get ID of expandable {@code customer} object. */
     public String getCustomer() {
@@ -97,34 +103,44 @@ public class Payment extends ApiResource implements MetadataStore<Payment>, HasI
         this.customer = new ExpandableField<Customer>(expandableObject.getId(), expandableObject);
     }
 
+    public CryptoCurrency getCryptoCurrency(String id) {
+        for (CryptoCurrency cryptoCurrency : this.supportedCryptocurrencies) {
+            if (cryptoCurrency.getId().equals(id)) {
+                return cryptoCurrency;
+            }
+        }
 
-    public static Payment create(PaymentCreateParams params) throws LokoException {
-        return create(params,  null);
-    }
-
-    public static Payment create(PaymentCreateParams params, RequestOptions options)
-            throws LokoException {
-        String path = "/v1/payments";
-        ApiResource.checkNullTypedParams(path, params);
-        ApiRequest request =
-                new ApiRequest(
-                        BaseAddress.API,
-                        ApiResource.RequestMethod.POST,
-                        path,
-                        ApiRequestParams.paramsToMap(params),
-                        options
-                );
-//                        ApiMode.V1);
-        return getGlobalResponseGetter().request(request, Payment.class);
-    }
-
-    @Override
-    public Payment update(Map<String, Object> params) throws LokoException {
         return null;
     }
 
-    @Override
-    public Payment update(Map<String, Object> params, RequestOptions options) throws LokoException {
-        return null;
-    }
+
+//    public static Payment create(PaymentCreateParams params) throws LokoException {
+//        return create(params,  null);
+//    }
+//
+//    public static Payment create(PaymentCreateParams params, RequestOptions options)
+//            throws LokoException {
+//        String path = "/v1/payments";
+//        ApiResource.checkNullTypedParams(path, params);
+//        ApiRequest request =
+//                new ApiRequest(
+//                        BaseAddress.API,
+//                        ApiResource.RequestMethod.POST,
+//                        path,
+//                        ApiRequestParams.paramsToMap(params),
+//                        options
+//                );
+////                        ApiMode.V1);
+//        return getGlobalResponseGetter().request(request, Payment.class);
+//    }
+//
+//    @Override
+//    public Payment update(Map<String, Object> params) throws LokoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public Payment update(Map<String, Object> params, RequestOptions options) throws LokoException {
+//        return null;
+//    }
 }

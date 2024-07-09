@@ -8,7 +8,7 @@ public abstract class Loko {
 
     public static final String API_VERSION = "1.0";
     public static final String LIVE_API_BASE = "https://api.lokopay.io";
-    public static final String TEST_API_BASE = "https://api.bitfa.dev";
+    public static final String TEST_API_BASE = "https://api-test.lokopay.io";
     public static final String CONNECT_API_BASE = "https://connect.lokopay.io";
     public static final String VERSION = "1.0";
 

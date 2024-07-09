@@ -12,20 +12,23 @@ import lombok.Setter;
 public class BlockchainNetwork extends ApiResource implements HasId {
 
     @SerializedName("id")
-    private String id;
+    String id;
 
     @SerializedName("destination_amount")
-    private String destinationAmount;
+    String destinationAmount;
 
     @SerializedName("destination_currency")
-    private String destinationCurrency;
+    String destinationCurrency;
+
+    @SerializedName("destination_network")
+    String destinationNetwork;
 
     @SerializedName("destination_network_fee")
-    private String destinationNetworkFee;
+    String destinationNetworkFee;
 
     @SerializedName("destination_network_fee_currency")
-    private String destinationNetworkFeeCurrency;
+    String destinationNetworkFeeCurrency;
 
     @SerializedName("destination_network_fee_monetary")
-    private String destinationNetworkFeeMonetary;
+    String destinationNetworkFeeMonetary;
 }

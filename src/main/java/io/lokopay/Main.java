@@ -2,10 +2,9 @@ package io.lokopay;
 
 import io.lokopay.exception.LokoException;
 import io.lokopay.model.*;
-import io.lokopay.param.ListParams;
-import io.lokopay.param.PaymentConfirmParams;
-import io.lokopay.param.PaymentCreateParams;
-import io.lokopay.param.PayoutCreateParams;
+import io.lokopay.param.*;
+
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -17,141 +16,212 @@ public class Main {
 
         // initial loko client
         LokoClient client = new LokoClient(
-                true,
+                false,
                 "gKpGuaGYxDmcsGwqbEnXSeWcJwYUKsjW",
                 "mGGvXEfkVrFMQQDhcGCqNyOMcKWjWyIV"
         );
 
-        PaymentConfirmParams params =
-                PaymentConfirmParams
+        // create a customer
+        Customer customer = new Customer();
+        customer.setId("0123456789");
+        customer.setEmail("ryo@lokopay.io");
+
+//        paymentProcess(client, customer);
+        payoutProcess(client, customer);
+//        networkfeeProcess(client);
+
+
+
+        System.out.println("============ end of process ============");
+    }
+
+    private static void paymentProcess(LokoClient client, Customer customer) {
+        // ============ start payment process ============
+        System.out.println("============ start payment process ============");
+
+        // create payment params
+        PaymentCreateParams createParams =
+                PaymentCreateParams
                         .builder()
-                        .setAmountDue("304000")
-                        .setCurrencyDue("BTC")
-                        .setSymbol("BTC")
+                        .setAmount("10000")
+                        .setCurrency("USDC")
+                        .setDescription("Order #123")
+                        .setCustomer(customer)
                         .build();
 
+        // create a new payment
         Payment payment = new Payment();
         try {
-            payment = client.payments().confirm("c7b8c80d-e7e5-431b-bf9d-4f626ee4947d", params);
+            payment = client.payments().create(createParams);
+            System.out.println("payment id: " + payment.getId());
+            System.out.println("payment status: " + payment.getStatus());
         } catch (LokoException e) {
-
-            System.out.println(e.getMessage());
-            System.out.println("Error Code: " + e.getCode());
+            e.printStackTrace();
         }
 
-//        // create customer
-//        Customer customer = new Customer();
-//        customer.setId("0123456789");
-//        customer.setEmail("ryo@lokopay.io");
-//
-//
-//       // create payment params
-//       PaymentCreateParams createParams =
-//               PaymentCreateParams
-//                       .builder()
-//                       .setAmount("10000")
-//                       .setCurrency("USDC")
-//                       .setDescription("Order #123")
-//                       .setCustomer(customer)
-//                       .build();
-//
-//       // create new payment
-//       Payment payment = new Payment();
-//       try {
-//           payment = client.payments().create(createParams);
-//           System.out.println("payment id: " + payment.getId());
-//           System.out.println("payment status: " + payment.getStatus());
-//       } catch (LokoException e) {
-//           e.printStackTrace();
-//       }
-//
-//       // retrieve payment for prices
-//       try {
-//           payment = client.payments().retrieve(payment.getId());
-//           System.out.println("payment supported cryptos: " + payment.getSupportedCryptocurrencies());
-//           System.out.println("payment status: " + payment.getStatus());
-//
-//       } catch (LokoException e) {
-//           e.printStackTrace();
-//       }
-//
-//       CryptoCurrency crypto = payment.getSupportedCryptocurrencies().get(0);
-//
-//       // confirm payment
-//       PaymentConfirmParams confirmParams =
-//               PaymentConfirmParams
-//                       .builder()
-//                       .setAmountDue(crypto.getAmount())
-//                       .setCurrencyDue(crypto.getCurrency())
-//                       .setSymbol(crypto.getSymbol())
-//                       .build();
-//       try {
-//           payment = client.payments().confirm(payment.getId(), confirmParams);
-//           System.out.println("payment status: " + payment.getStatus());
-//       } catch (LokoException e) {
-//           e.printStackTrace();
-//       }
-//
-//       // retrieve payment for address
-//       try {
-//           payment = client.payments().retrieve(payment.getId());
-//           System.out.println("address: " +  payment.getCurrencyDueAddress());
-//           System.out.println("payment status: " + payment.getStatus());
-//       } catch (LokoException e) {
-//           e.printStackTrace();
-//       }
-//
-//       // retrieve payment history
-//       ListParams listParams =
-//               ListParams
-//                       .builder()
-//                       .setLimit(10L)
-//                       .setEndingBefore(payment.getId()) //payment.getId()
-//                       .build();
-//
-//       try {
-//           LokoCollection<Payment> payments = client.payments().list(listParams);
-//           System.out.println("Payments: " + payments);
-//       } catch (LokoException e) {
-//           e.printStackTrace();
-//       }
-//
-//
-//        customer.setDestinationAddress("tb1q6st7m3pss43lznpanadzaswd8g0n8gcgftshud");
-//        customer.setDestinationNetwork("Ethereum");
-//        // payout
-//        PayoutCreateParams payoutParams =
-//                PayoutCreateParams
-//                        .builder()
-//                        .setAmount("1000")
-//                        .setCurrency("USDC")
-//                        .setDescription("withdraw #1234")
-//                        .setCustomer(customer)
-//                        .build();
-//
-//        // create new payout
-//        Payout payout = new Payout();
-//        try {
-//            payout = client.payouts().create(payoutParams);
-//            System.out.println("payout id: " + payout.getId());
-//            System.out.println("payout status: " + payout.getStatus());
-//        } catch (LokoException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//
-//        try {
-//            Thread.sleep(4000);
-//            payout = client.payouts().retrieve(payout.getId());
-//
-//            System.out.println("payout status: " + payout.getStatus());
-//            System.out.println("payout network details: " + payout.getBLockchainNetworkDeatils());
-//        } catch (LokoException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        // retrieve the payment for prices
+        try {
+            payment = client.payments().retrieve(payment.getId());
+            System.out.println("payment supported cryptos: " + payment.getSupportedCryptocurrencies());
+            System.out.println("payment status: " + payment.getStatus());
 
-        client.PrintSomething();
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+
+        // list of cryptocurrencies supported for customer to choose
+        System.out.println(payment.getSupportedCryptocurrencies());
+
+        List<CryptoCurrency> cryptos = payment.getSupportedCryptocurrencies();
+        CryptoCurrency pickedCrypto = new CryptoCurrency();
+
+        for (CryptoCurrency cryptoCurrency : cryptos) {
+            if (cryptoCurrency.getPair().equals("USDC-USDC")) {
+                pickedCrypto = cryptoCurrency;
+                break;
+            }
+        }
+//        // assume customer pick the first one
+//        CryptoCurrency cryptocurrency = payment.getSupportedCryptocurrencies().get(0);
+//
+//        // customer picked the one to pay
+//        CryptoCurrency pickedCrypto = payment.getCryptoCurrency(cryptocurrency.getId());
+
+        // confirm the payment with chosen cryptocurrency
+        PaymentConfirmParams confirmParams =
+                PaymentConfirmParams
+                        .builder()
+                        .setCryptocurrency(pickedCrypto)
+                        .build();
+        try {
+            payment = client.payments().confirm(payment.getId(), confirmParams);
+            System.out.println("payment status: " + payment.getStatus());
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+
+        // retrieve the payment for address
+        try {
+            Thread.sleep(4000);
+            payment = client.payments().retrieve(payment.getId());
+            System.out.println("address: " +  payment.getCurrencyDueAddress());
+            System.out.println("payment status: " + payment.getStatus());
+        } catch (LokoException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // retrieve payment history
+        ListParams listParams =
+                ListParams
+                        .builder()
+                        .setLimit(10L)
+                        .setEndingBefore(payment.getId()) //payment.getId()
+                        .build();
+
+        try {
+            LokoCollection<Payment> payments = client.payments().list(listParams);
+            System.out.println("Payments: " + payments);
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void payoutProcess(LokoClient client, Customer customer) {
+        // ============ start payout process ============
+        System.out.println("============ start payout process ============");
+
+        // setup customer wallet info
+        customer.setDestinationCurrency("USDC");
+        customer.setDestinationNetwork("Ethereum");
+        customer.setDestinationAddress("0x1aBB9515E78C516AFC1A6F2222401da183654d67");
+
+        // create payout params
+        PayoutCreateParams payoutParams =
+                PayoutCreateParams
+                        .builder()
+                        .setAmount("2000")
+                        .setCurrency("USDC")
+                        .setDescription("withdraw #1234")
+                        .setCustomer(customer)
+                        .build();
+
+        // create a new payout
+        Payout payout = new Payout();
+        try {
+            payout = client.payouts().create(payoutParams);
+            System.out.println("payout id: " + payout.getId());
+            System.out.println("payout status: " + payout.getStatus());
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+
+        // retrieve the payout for network fee
+        try {
+
+            int count = 0;
+            while(payout.getDestinationNetworkDetails() == null) {
+                Thread.sleep(4000);
+                payout = client.payouts().retrieve(payout.getId());
+
+                System.out.println("payout status: " + payout.getStatus() + " count " + count);
+                count ++;
+            }
+
+            System.out.println("payout supported networks: " + payout.getDestinationNetworkDetails());
+            System.out.println("payout status: " + payout.getStatus());
+        } catch (LokoException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // pick the network want to receive crypto, for now always the USDC
+        BlockchainNetwork network = payout.getDestinationNetworkDetails().get(0);
+
+        System.out.println("network_detail: " + network);
+        // confirm the payout
+        PayoutConfirmParams confirmPayoutParams =
+                PayoutConfirmParams
+                        .builder()
+                        .setDestinationNetworkDetail(network)
+                        .build();
+        //or set with following
+//        PayoutConfirmParams confirmParams =
+//                PayoutConfirmParams
+//                        .builder()
+//                        .setId(network.getId())
+//                        .setAmount(network.getDestinationAmount())
+//                        .setCurrency(network.getDestinationCurrency())
+//                        .setNetwork(network.getDestinationNetwork())
+//                        .setNetworkFee(network.getDestinationNetworkFee())
+//                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
+//                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
+//                        .build();
+
+        try {
+            payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+
+        // retrieve the payout for network fee
+        try {
+            Thread.sleep(4000);
+            payout = client.payouts().retrieve(payout.getId());
+            System.out.println("payout status: " + payout.getStatus());
+
+        } catch (LokoException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void networkfeeProcess(LokoClient client) {
+        // ============ start payout process ============
+        System.out.println("============ start network fee process ============");
+
+        try {
+            NetworkFee networkFees = client.networkFees().list();
+            System.out.println(networkFees);
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
     }
 }

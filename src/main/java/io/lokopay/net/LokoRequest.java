@@ -144,11 +144,8 @@ public class LokoRequest {
                     0
             );
         }
-        headerMap.put("loko-publishable-key", List.of(publicKey));
-
+        headerMap.put("loko-publishable-key", Arrays.asList(publicKey));
         headerMap.put("loko-signature", Arrays.asList(signature));
-//        headerMap.put("Authorization", Arrays.asList(String.format("Bearer %s", apiKey)));
-
 
         if (options.getIdempotencyKey() != null) {
             headerMap.put("loko-idempotent-key", Arrays.asList(options.getIdempotencyKey()));

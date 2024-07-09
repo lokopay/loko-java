@@ -63,8 +63,8 @@ public final class PaymentService extends ApiService {
     }
 
     public LokoCollection<Payment> list(ListParams params) throws LokoException {
-
         String path = "/v1/payments";
+
         ApiRequest request = new ApiRequest(
                 BaseAddress.API,
                 ApiResource.RequestMethod.GET,

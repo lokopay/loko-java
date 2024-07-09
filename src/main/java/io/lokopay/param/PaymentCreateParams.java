@@ -75,5 +75,4 @@ public class PaymentCreateParams extends ApiRequestParams {
             return this;
         }
     }
-
 }

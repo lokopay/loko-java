@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class BlockchainTransaction extends ApiResource implements HasId, MetadataStore<BlockchainTransaction> {
+public class BlockchainTransaction extends ApiResource implements HasId {
 
     @SerializedName("id")
     String id;
@@ -24,7 +24,10 @@ public class BlockchainTransaction extends ApiResource implements HasId, Metadat
     @SerializedName("currency")
     String currency;
 
-    @SerializedName("destination_address")
+    @SerializedName("network")
+    String network;
+
+    @SerializedName("address")
     String destinationAddress;
 
     @SerializedName("tx_hash")
@@ -33,17 +36,4 @@ public class BlockchainTransaction extends ApiResource implements HasId, Metadat
     @SerializedName("confirmations")
     Long confirmations;
 
-    @Getter(onMethod_ = {@Override})
-    @SerializedName("metadata")
-    Map<String, String> metadata;
-
-    @Override
-    public BlockchainTransaction update(Map<String, Object> params) throws LokoException {
-        return null;
-    }
-
-    @Override
-    public BlockchainTransaction update(Map<String, Object> params, RequestOptions options) throws LokoException {
-        return null;
-    }
 }

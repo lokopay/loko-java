@@ -6,7 +6,7 @@ import io.lokopay.model.LokoCollection;
 import io.lokopay.model.Payout;
 import io.lokopay.net.*;
 import io.lokopay.param.ListParams;
-import io.lokopay.param.PaymentConfirmParams;
+import io.lokopay.param.PayoutConfirmParams;
 import io.lokopay.param.PayoutCreateParams;
 
 public final class PayoutService extends ApiService {
@@ -45,11 +45,11 @@ public final class PayoutService extends ApiService {
         return this.request(request, Payout.class);
     }
 
-    public Payout confirm(String payoutId, PaymentConfirmParams params) throws LokoException {
+    public Payout confirm(String payoutId, PayoutConfirmParams params) throws LokoException {
         return confirm(payoutId, params, null);
     }
 
-    public Payout confirm(String payoutId, PaymentConfirmParams params, RequestOptions options) throws LokoException {
+    public Payout confirm(String payoutId, PayoutConfirmParams params, RequestOptions options) throws LokoException {
         String path = String.format("/v1/payouts/%s/confirm", payoutId);
         ApiRequest request = new ApiRequest(
                 BaseAddress.API,

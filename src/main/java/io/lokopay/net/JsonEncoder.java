@@ -12,8 +12,8 @@ public final class JsonEncoder {
 
 
     public static HttpContent createHttpContent(Map<String, Object> params) throws IOException {
-        return HttpContent.buildJsonContent(Objects.requireNonNullElseGet(params, HashMap::new));
-
+//        return HttpContent.buildJsonContent(Objects.requireNonNullElseGet(params, HashMap::new));
+        return HttpContent.buildJsonContent(params);
     }
 
     public static String createJsonString(Map<String, Object> params) throws IOException {

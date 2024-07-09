@@ -9,16 +9,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class CryptoCurrency extends ApiResource {
+public class CryptoCurrency extends ApiResource implements HasId{
+
+    @SerializedName("id")
+    String id;
 
     @SerializedName("price")
     Double price;
 
     @SerializedName("price_pair")
     String pair;
-
-    @SerializedName("symbol")
-    String symbol;
 
     @SerializedName("network")
     String network;

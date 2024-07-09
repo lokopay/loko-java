@@ -15,13 +15,16 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class Payout extends ApiResource implements HasId, MetadataStore<Payout> {
+public class Payout extends ApiResource implements HasId {
 
     @SerializedName("id")
     String id;
 
     @SerializedName("object")
     String object;
+
+    @SerializedName("object_secret")
+    String objectSecret;
 
     @SerializedName("amount")
     String amount;
@@ -38,7 +41,7 @@ public class Payout extends ApiResource implements HasId, MetadataStore<Payout> 
     ExpandableField<Customer> customer;
 
     @SerializedName("destination_network_details")
-    BlockchainNetwork destinationNetworkDetails;
+    List<BlockchainNetwork> destinationNetworkDetails;
 
     @SerializedName("blockchain_transaction_details")
     List<BlockchainTransaction> blockchainTransactionDetails;
@@ -52,10 +55,6 @@ public class Payout extends ApiResource implements HasId, MetadataStore<Payout> 
     @SerializedName("created_at")
     Long createdAt;
 
-    @Getter(onMethod_ = {@Override})
-    @SerializedName("metadata")
-    Map<String, String> metadata;
-
 //    public void setCustomer(Customer customer) {
 //        if (customer == null) {}
 //    }
@@ -64,36 +63,4 @@ public class Payout extends ApiResource implements HasId, MetadataStore<Payout> 
         return (this.customer != null) ? this.customer.getExpanded() : null;
     }
 
-    public BlockchainNetwork getBLockchainNetworkDeatils() {
-        return (this.destinationNetworkDetails != null) ? this.destinationNetworkDetails : null;
-    }
-
-    public static Payout create(PayoutCreateParams params) throws LokoException {
-        return create(params, null);
-    }
-
-    public static Payout create(PayoutCreateParams params, RequestOptions options)
-            throws LokoException {
-        String path = "/v1/payouts";
-        ApiResource.checkNullTypedParams(path, params);
-        ApiRequest request =
-                new ApiRequest(
-                        BaseAddress.API,
-                        RequestMethod.POST,
-                        path,
-                        ApiRequestParams.paramsToMap(params),
-                        options
-                );
-        return getGlobalResponseGetter().request(request, Payout.class);
-    }
-
-    @Override
-    public Payout update(Map<String, Object> params) throws LokoException {
-        return null;
-    }
-
-    @Override
-    public Payout update(Map<String, Object> params, RequestOptions options) throws LokoException {
-        return null;
-    }
 }
