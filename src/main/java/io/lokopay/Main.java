@@ -140,7 +140,7 @@ public class Main {
                 PayoutCreateParams
                         .builder()
                         .setAmount("2000")
-                        .setCurrency("USDC")
+//                        .setCurrency("USDC")
                         .setDescription("withdraw #1234")
                         .setCustomer(customer)
                         .build();
@@ -152,7 +152,11 @@ public class Main {
             System.out.println("payout id: " + payout.getId());
             System.out.println("payout status: " + payout.getStatus());
         } catch (LokoException e) {
-            e.printStackTrace();
+            System.out.println("error code: " + e.getCode());
+            System.out.println("error message: " + e.getMessage());
+            return;
+//            e.getCode();
+//            e.printStackTrace();
         }
 
         // retrieve the payout for network fee
@@ -183,18 +187,19 @@ public class Main {
                         .builder()
                         .setDestinationNetworkDetail(network)
                         .build();
+
         //or set with following
-//        PayoutConfirmParams confirmParams =
-//                PayoutConfirmParams
-//                        .builder()
-//                        .setId(network.getId())
-//                        .setAmount(network.getDestinationAmount())
-//                        .setCurrency(network.getDestinationCurrency())
-//                        .setNetwork(network.getDestinationNetwork())
-//                        .setNetworkFee(network.getDestinationNetworkFee())
-//                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
-//                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
-//                        .build();
+        PayoutConfirmParams confirmParams =
+                PayoutConfirmParams
+                        .builder()
+                        .setId(network.getId())
+                        .setAmount(network.getDestinationAmount())
+                        .setCurrency(network.getDestinationCurrency())
+                        .setNetwork(network.getDestinationNetwork())
+                        .setNetworkFee(network.getDestinationNetworkFee())
+                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
+                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
+                        .build();
 
         try {
             payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);

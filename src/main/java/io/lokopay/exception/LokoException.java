@@ -64,12 +64,12 @@ public class LokoException extends Exception{
     @Override
     public String getMessage() {
         String additionalInfo = "";
-        if (code != null) {
-            additionalInfo += "; code: " + code;
-        }
-        if (requestId != null) {
-            additionalInfo += "; request-id: " + requestId;
-        }
+//        if (code != null) {
+//            additionalInfo += "; code: " + code;
+//        }
+//        if (requestId != null) {
+//            additionalInfo += "; request-id: " + requestId;
+//        }
         return super.getMessage() + additionalInfo;
     }
 
@@ -82,4 +82,7 @@ public class LokoException extends Exception{
         return super.getMessage();
     }
 
+//    public String getCode() {
+//        return this.lokoError.getCodeName();
+//    }
 }

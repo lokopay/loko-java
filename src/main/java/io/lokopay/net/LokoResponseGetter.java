@@ -237,7 +237,7 @@ public class LokoResponseGetter implements ResponseGetter {
                                     error.getMessage(),
 //                                    error.getParam(),
 //                                    response.requestId(),
-                                    error.getCode(),
+                                    error.getCodeName(),
                                     response.code(),
                                     null);
                 }
