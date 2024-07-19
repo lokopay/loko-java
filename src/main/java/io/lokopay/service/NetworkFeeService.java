@@ -10,7 +10,7 @@ import java.util.List;
 
 public final class NetworkFeeService extends ApiService {
 
-    public NetworkFeeService(ResponseGetter responseGetter) {
+    public NetworkFeeService(LokoResponseGetter responseGetter) {
         super(responseGetter);
     }
 

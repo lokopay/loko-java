@@ -11,9 +11,9 @@ import java.lang.reflect.Type;
 public abstract class ApiService {
 
     @Getter(AccessLevel.PROTECTED)
-    private final ResponseGetter responseGetter;
+    private final LokoResponseGetter responseGetter;
 
-    protected ApiService(ResponseGetter responseGetter) {
+    protected ApiService(LokoResponseGetter responseGetter) {
         this.responseGetter = responseGetter;
     }
 
@@ -25,5 +25,4 @@ public abstract class ApiService {
     protected InputStream requestStream(ApiRequest request) throws LokoException {
         return this.getResponseGetter().requestStream(request.addUsage("loko_client"));
     }
-
 }

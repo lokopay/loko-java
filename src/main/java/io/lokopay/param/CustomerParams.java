@@ -3,7 +3,6 @@ package io.lokopay.param;
 import com.google.gson.annotations.SerializedName;
 import io.lokopay.model.EncryptableField;
 import io.lokopay.net.ApiRequestParams;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

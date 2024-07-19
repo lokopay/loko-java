@@ -1,21 +1,14 @@
 package io.lokopay.net;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.Instant;
 import java.util.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.lokopay.Loko;
 import io.lokopay.exception.ApiConnectionException;
 import io.lokopay.exception.AuthenticationException;
 import io.lokopay.exception.LokoException;
-import io.lokopay.model.Customer;
-import io.lokopay.model.EncryptableField;
-import io.lokopay.model.EncryptableFieldSerializer;
 import io.lokopay.util.Security;
 import io.lokopay.util.StringUtils;
 import lombok.AccessLevel;
@@ -58,7 +51,6 @@ public class LokoRequest {
 
         try {
 
-//            encryptParams(params, options);
             this.params = (params != null) ? Collections.unmodifiableMap(params) : null;
             this.options = (options != null) ? options : RequestOptions.getDefault();
             this.method = method;

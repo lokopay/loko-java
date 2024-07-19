@@ -24,8 +24,8 @@ public class Main {
         );
 
 
-//        paymentProcess(client);
-        payoutProcess(client);
+        paymentProcess(client);
+//        payoutProcess(client);
 //        networkfeeProcess(client);
 
 
@@ -34,6 +34,7 @@ public class Main {
     }
 
     private static void paymentProcess(LokoClient client) {
+
         // ============ start payment process ============
         System.out.println("============ start payment process ============");
 
@@ -66,6 +67,7 @@ public class Main {
 
         // retrieve the payment for prices
         try {
+
             payment = client.payments().retrieve(payment.getId());
             System.out.println("payment supported cryptos: " + payment.getSupportedCryptocurrencies());
             System.out.println("payment status: " + payment.getStatus());
@@ -74,8 +76,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        // list of cryptocurrencies supported for customer to choose
-        System.out.println(payment.getSupportedCryptocurrencies());
 
         List<CryptoCurrency> cryptos = payment.getSupportedCryptocurrencies();
         CryptoCurrency pickedCrypto = new CryptoCurrency();
@@ -96,6 +96,7 @@ public class Main {
         try {
             payment = client.payments().confirm(payment.getId(), confirmParams);
             System.out.println("payment status: " + payment.getStatus());
+
         } catch (LokoException e) {
             e.printStackTrace();
         }
@@ -104,8 +105,10 @@ public class Main {
         try {
             Thread.sleep(4000);
             payment = client.payments().retrieve(payment.getId());
-            System.out.println("address: " +  payment.getCurrencyDueAddress());
             System.out.println("payment status: " + payment.getStatus());
+            System.out.println("address: " +  payment.getCurrencyDueAddress());
+            System.out.println("payment customer: " + payment.getCustomer());
+
         } catch (LokoException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -193,40 +196,40 @@ public class Main {
 
         System.out.println("network_detail: " + network);
         // confirm the payout
-        PayoutConfirmParams confirmPayoutParams =
-                PayoutConfirmParams
-                        .builder()
-                        .setDestinationNetworkDetail(network)
-                        .build();
-
-        //or set with following
-        PayoutConfirmParams confirmParams =
-                PayoutConfirmParams
-                        .builder()
-                        .setId(network.getId())
-                        .setAmount(network.getDestinationAmount())
-                        .setCurrency(network.getDestinationCurrency())
-                        .setNetwork(network.getDestinationNetwork())
-                        .setNetworkFee(network.getDestinationNetworkFee())
-                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
-                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
-                        .build();
-
-        try {
-            payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);
-        } catch (LokoException e) {
-            e.printStackTrace();
-        }
-
-        // retrieve the payout for network fee
-        try {
-            Thread.sleep(4000);
-            payout = client.payouts().retrieve(payout.getId());
-            System.out.println("payout status: " + payout.getStatus());
-
-        } catch (LokoException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        PayoutConfirmParams confirmPayoutParams =
+//                PayoutConfirmParams
+//                        .builder()
+//                        .setDestinationNetworkDetail(network)
+//                        .build();
+//
+//        //or set with following
+//        PayoutConfirmParams confirmParams =
+//                PayoutConfirmParams
+//                        .builder()
+//                        .setId(network.getId())
+//                        .setAmount(network.getDestinationAmount())
+//                        .setCurrency(network.getDestinationCurrency())
+//                        .setNetwork(network.getDestinationNetwork())
+//                        .setNetworkFee(network.getDestinationNetworkFee())
+//                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
+//                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
+//                        .build();
+//
+//        try {
+//            payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);
+//        } catch (LokoException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // retrieve the payout for network fee
+//        try {
+//            Thread.sleep(4000);
+//            payout = client.payouts().retrieve(payout.getId());
+//            System.out.println("payout status: " + payout.getStatus());
+//
+//        } catch (LokoException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static void networkfeeProcess(LokoClient client) {

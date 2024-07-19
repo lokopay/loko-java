@@ -5,14 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.lokopay.Loko;
-import io.lokopay.model.Customer;
-import io.lokopay.model.EncryptableField;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,7 +22,6 @@ class ApiRequestParamsConverter {
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
           .registerTypeAdapterFactory(new HasEmptyEnumTypeAdapterFactory())
           .registerTypeAdapterFactory(new NullValuesInMapsTypeAdapterFactory())
-          .registerTypeAdapterFactory(new EncryptFieldTypeAdapterFactory())
           .create();
 
   private static final UntypedMapDeserializer FLATTENING_EXTRA_PARAMS_DESERIALIZER =
@@ -83,68 +78,6 @@ class ApiRequestParamsConverter {
                   + "should add extra params at the nested params themselves, not from the "
                   + "top-level param.",
               paramKey, outerMap.get(paramKey), paramValue));
-    }
-  }
-
-
-  private static class EncryptFieldTypeAdapterFactory implements TypeAdapterFactory {
-
-    @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-
-      System.out.println("create EncryptFieldTypeAdapterFactory");
-
-      Class<T> clazz = (Class<T>) type.getRawType();
-      Map<String, String> renamedFields = new HashMap<>();
-
-      for (Field field : clazz.getDeclaredFields()) {
-        EncryptableField annotation = field.getAnnotation(EncryptableField.class);
-        if (annotation != null) {
-          System.out.println("found encryptable field " + field);
-          renamedFields.put(field.getName(), annotation.value() + field.getName());
-        }
-      }
-
-      if (renamedFields.isEmpty()) {
-        return null;
-      }
-
-//      return (TypeAdapter<T>) new TypeAdapter<T>() {
-
-      TypeAdapter<T> encryptedTypeAdapter = new TypeAdapter<T>() {
-//        final TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
-
-        @Override
-        public void write(JsonWriter out, T value) throws IOException {
-          out.beginObject();
-
-          out.name(value.getClass().getSimpleName());
-
-          for( Field field : value.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            String fieldName = field.getName();
-            if (renamedFields.containsKey(fieldName)) {
-              fieldName = renamedFields.get(fieldName);
-            }
-
-
-          }
-//          T tempObject = createTempObject(value, renamedFields);
-//          delegate.write(out, tempObject);
-          System.out.println("encrypted fields " + renamedFields);
-          out.endObject();
-        }
-
-        @Override
-        public T read(JsonReader in) throws IOException {
-          throw new UnsupportedOperationException(
-                  "No deserialization is expected from this private type adapter for enum param.");
-        }
-
-      };
-
-      return encryptedTypeAdapter;
-//      };
     }
   }
 
@@ -279,31 +212,3 @@ class ApiRequestParamsConverter {
     return FLATTENING_EXTRA_PARAMS_DESERIALIZER.deserialize(jsonParams);
   }
 }
-
-
-//      try {
-//        for (Field field : type.getRawType().getDeclaredFields()) {
-//
-//
-//          if (field.isAnnotationPresent(EncryptableField.class)) {
-////            field.setAccessible(true);
-////            field.get
-//            Object value = field.get(type.getRawType());
-////            field.get
-//            System.out.println("EncryptFieldTypeAdapterFactory found encryptable field");
-////              JsonElement cryptedEelement = jsonOb
-////            field
-//            System.out.println("field name: " + field.getName());
-//            System.out.println("field type: " + field.toString());
-//          }
-//        }
-//      } catch (Exception e) {
-//
-//      }
-//
-//      Class<T> rawType = (Class<T>) type.getRawType();
-//      if (rawType.isAnnotationPresent(EncryptableField.class)) {
-//        System.out.println("====== type class" + type.getRawType());
-//      }
-//      return null;
-//    }

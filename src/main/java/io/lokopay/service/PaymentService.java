@@ -11,7 +11,7 @@ import io.lokopay.param.PaymentCreateParams;
 
 public final class PaymentService extends ApiService {
 
-    public PaymentService(ResponseGetter responseGetter) {
+    public PaymentService(LokoResponseGetter responseGetter) {
         super(responseGetter);
     }
 

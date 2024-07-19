@@ -6,6 +6,7 @@ import io.lokopay.Loko;
 import io.lokopay.exception.*;
 import io.lokopay.model.LokoCollectionInterface;
 import io.lokopay.model.LokoError;
+import io.lokopay.model.LokoObject;
 import io.lokopay.model.LokoObjectInterface;
 import io.lokopay.util.Stopwatch;
 
@@ -73,6 +74,15 @@ public class LokoResponseGetter implements ResponseGetter {
         if (resource instanceof LokoCollectionInterface<?>) {
             ((LokoCollectionInterface<?>) resource).setRequestOptions(apiRequest.getOptions());
             ((LokoCollectionInterface<?>) resource).setRequestParams(apiRequest.getParams());
+        }
+
+        if (resource instanceof LokoCollectionInterface<?>) {
+            LokoCollectionInterface<?> collection = (LokoCollectionInterface<?>) resource;
+            for (Object lokoObject : collection.getData()) {
+                lokoObject = ApiResource.decryptLokoObject(lokoObject, this.getSecrityKey());
+            }
+        } else {
+            resource = (T) ApiResource.decryptLokoObject(resource, this.getSecrityKey());
         }
 
         resource.setLastResponse(response);

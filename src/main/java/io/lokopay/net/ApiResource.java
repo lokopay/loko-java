@@ -54,7 +54,7 @@ public abstract class ApiResource extends LokoObject implements LokoActiveObject
                 new GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 //                        .registerTypeAdapter(EphemeralKey.class, new EphemeralKeyDeserializer())
-//                        .registerTypeAdapter(Event.Data.class, new EventDataDeserializer())
+                        .registerTypeAdapter(Event.Data.class, new EventDataDeserializer())
 //                        .registerTypeAdapter(Event.Request.class, new EventRequestDeserializer())
                         .registerTypeAdapter(ExpandableField.class, new ExpandableFieldDeserializer())
                         .registerTypeAdapter(LokoRawJsonObject.class, new LokoRawJsonObjectDeserializer())
@@ -158,5 +158,4 @@ public abstract class ApiResource extends LokoObject implements LokoActiveObject
         return Objects.equals(
                 System.getProperty("loko.disallowGlobalResponseGetterFallback"), "true");
     }
-
 }

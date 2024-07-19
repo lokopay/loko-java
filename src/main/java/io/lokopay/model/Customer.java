@@ -30,8 +30,4 @@ public class Customer extends ApiResource implements HasId {
 
     @SerializedName("destination_currency")
     String destinationCurrency;
-
-//    public void setDestinationAddress(String destinationAddress, String key) throws Exception {
-//        this.destinationAddress = Security.AESEncrypt(destinationAddress, key);
-//    }
 }

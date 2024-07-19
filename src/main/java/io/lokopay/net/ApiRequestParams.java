@@ -1,5 +1,4 @@
 package io.lokopay.net;
-
 import java.util.Map;
 
 /**
@@ -18,6 +17,7 @@ public abstract class ApiRequestParams {
   /** Converter mapping typed API request parameters into an untyped map. */
   private static final ApiRequestParamsConverter PARAMS_CONVERTER = new ApiRequestParamsConverter();
 
+  private static final ApiRequestParamsEncryptor PARAMS_ENCRYPTOR = new ApiRequestParamsEncryptor();
   /**
    * Interface implemented by all enum parameter to get the actual string value that Loko API
    * expects. Internally, it used in custom serialization {@link ApiRequestParamsConverter}
@@ -34,6 +34,11 @@ public abstract class ApiRequestParams {
    */
   public Map<String, Object> toMap() {
     return PARAMS_CONVERTER.convert(this);
+  }
+
+  public ApiRequestParams encryptParams(String key) {
+    PARAMS_ENCRYPTOR.encrypt(this, key);
+    return this;
   }
 
   /**

@@ -28,11 +28,6 @@ public class LokoClient {
         this.responseGetter = responseGetter;
     }
 
-
-    public void PrintSomething() {
-        System.out.println("Print something !");
-    }
-
     public io.lokopay.service.PaymentService payments() {
         return new io.lokopay.service.PaymentService(this.responseGetter);
     }

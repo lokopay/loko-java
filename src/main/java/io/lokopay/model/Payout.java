@@ -35,10 +35,12 @@ public class Payout extends ApiResource implements HasId {
     @SerializedName("description")
     String description;
 
+//    @SerializedName("customer")
+//    @Getter(lombok.AccessLevel.NONE)
+//    @Setter(lombok.AccessLevel.NONE)
+//    ExpandableField<Customer> customer;
     @SerializedName("customer")
-    @Getter(lombok.AccessLevel.NONE)
-    @Setter(lombok.AccessLevel.NONE)
-    ExpandableField<Customer> customer;
+    Customer customer;
 
     @SerializedName("destination_network_details")
     List<BlockchainNetwork> destinationNetworkDetails;
@@ -59,7 +61,7 @@ public class Payout extends ApiResource implements HasId {
 //        if (customer == null) {}
 //    }
 
-    public Customer getCustomer() {
-        return (this.customer != null) ? this.customer.getExpanded() : null;
-    }
+//    public Customer getCustomer() {
+//        return (this.customer != null) ? this.customer.getExpanded() : null;
+//    }
 }

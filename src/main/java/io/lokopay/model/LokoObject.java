@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.lokopay.net.ApiResource;
+import io.lokopay.net.ApiResourceDecryptor;
 import io.lokopay.net.LokoResponse;
 import io.lokopay.net.ResponseGetter;
 
@@ -23,6 +24,8 @@ public abstract class LokoObject implements LokoObjectInterface{
     private transient LokoResponse lastResponse;
 
     private transient JsonObject rawJsonObject;
+
+    private static final ApiResourceDecryptor LOKO_OBJECT_DECRYPTOR = new ApiResourceDecryptor();
 
     @Override
     public String toString() {
@@ -137,5 +140,9 @@ public abstract class LokoObject implements LokoObjectInterface{
         }
 
         return object;
+    }
+
+    public static <T> T decryptLokoObject(T resource, String key) {
+        return (T) LOKO_OBJECT_DECRYPTOR.decrypt((LokoObject) resource, key);
     }
 }

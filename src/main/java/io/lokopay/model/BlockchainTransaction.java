@@ -27,9 +27,11 @@ public class BlockchainTransaction extends ApiResource implements HasId {
     @SerializedName("network")
     String network;
 
+    @EncryptableField
     @SerializedName("address")
     String destinationAddress;
 
+    @EncryptableField
     @SerializedName("tx_hash")
     String txHash;
 

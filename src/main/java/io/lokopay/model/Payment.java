@@ -36,9 +36,7 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
     String description;
 
     @SerializedName("customer")
-    @Getter(lombok.AccessLevel.NONE)
-    @Setter(lombok.AccessLevel.NONE)
-    ExpandableField<Customer> customer;
+    Customer customer;
 
     @SerializedName("amount_due")
     String amountDue;
@@ -49,6 +47,7 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
     @SerializedName("currency_due_network")
     String currencyDueNetwork;
 
+    @EncryptableField
     @SerializedName("currency_due_address")
     String currencyDueAddress;
 
@@ -62,8 +61,6 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
     List<CryptoCurrency> supportedCryptocurrencies;
 
     @SerializedName("blockchain_transaction_details")
-//    @Getter(lombok.AccessLevel.NONE)
-//    @Setter(lombok.AccessLevel.NONE)
     List<BlockchainTransaction> blockchainTransactionDetails;
 
     @SerializedName("failed_reason")
@@ -81,28 +78,6 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
     @SerializedName("created_at")
     Long createdAt;
 
-//    @Getter(onMethod_ = {@Override})
-//    @SerializedName("metadata")
-//    Map<String, String> metadata;
-
-    /** Get ID of expandable {@code customer} object. */
-    public String getCustomer() {
-        return (this.customer != null) ? this.customer.getId() : null;
-    }
-
-    public void setCustomer(String id) {
-        this.customer = ApiResource.setExpandableFieldId(id, this.customer);
-    }
-
-    /** Get expanded {@code customer}. */
-    public Customer getCustomerObject() {
-        return (this.customer != null) ? this.customer.getExpanded() : null;
-    }
-
-    public void setCustomerObject(Customer expandableObject) {
-        this.customer = new ExpandableField<Customer>(expandableObject.getId(), expandableObject);
-    }
-
     public CryptoCurrency getCryptoCurrency(String id) {
         for (CryptoCurrency cryptoCurrency : this.supportedCryptocurrencies) {
             if (cryptoCurrency.getId().equals(id)) {
@@ -112,7 +87,29 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
 
         return null;
     }
+}
 
+//    @Getter(onMethod_ = {@Override})
+//    @SerializedName("metadata")
+//    Map<String, String> metadata;
+
+/** Get ID of expandable {@code customer} object. */
+//    public String getCustomer() {
+//        return (this.customer != null) ? this.customer.getId() : null;
+//    }
+
+//    public void setCustomer(String id) {
+//        this.customer = ApiResource.setExpandableFieldId(id, this.customer);
+//    }
+
+/** Get expanded {@code customer}. */
+//    public Customer getCustomerObject() {
+//        return (this.customer != null) ? this.customer.getExpanded() : null;
+//    }
+
+//    public void setCustomerObject(Customer expandableObject) {
+//        this.customer = new ExpandableField<Customer>(expandableObject.getId(), expandableObject);
+//    }
 
 //    public static Payment create(PaymentCreateParams params) throws LokoException {
 //        return create(params,  null);
@@ -143,4 +140,3 @@ public class Payment extends ApiResource implements HasId { //MetadataStore<Paym
 //    public Payment update(Map<String, Object> params, RequestOptions options) throws LokoException {
 //        return null;
 //    }
-}
