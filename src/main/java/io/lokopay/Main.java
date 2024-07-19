@@ -4,6 +4,8 @@ import io.lokopay.exception.LokoException;
 import io.lokopay.model.*;
 import io.lokopay.param.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -21,13 +23,9 @@ public class Main {
                 "mGGvXEfkVrFMQQDhcGCqNyOMcKWjWyIV"
         );
 
-        // create a customer
-        Customer customer = new Customer();
-        customer.setId("0123456789");
-        customer.setEmail("ryo@lokopay.io");
 
-//        paymentProcess(client, customer);
-        payoutProcess(client, customer);
+//        paymentProcess(client);
+        payoutProcess(client);
 //        networkfeeProcess(client);
 
 
@@ -35,9 +33,16 @@ public class Main {
         System.out.println("============ end of process ============");
     }
 
-    private static void paymentProcess(LokoClient client, Customer customer) {
+    private static void paymentProcess(LokoClient client) {
         // ============ start payment process ============
         System.out.println("============ start payment process ============");
+
+        CustomerParams customerParams =
+                CustomerParams
+                        .builder()
+                        .setId("0123456")
+                        .setEmail("ryo@lokopay.io")
+                        .build();
 
         // create payment params
         PaymentCreateParams createParams =
@@ -46,7 +51,7 @@ public class Main {
                         .setAmount("10000")
                         .setCurrency("USDC")
                         .setDescription("Order #123")
-                        .setCustomer(customer)
+                        .setCustomer(customerParams)
                         .build();
 
         // create a new payment
@@ -81,11 +86,6 @@ public class Main {
                 break;
             }
         }
-//        // assume customer pick the first one
-//        CryptoCurrency cryptocurrency = payment.getSupportedCryptocurrencies().get(0);
-//
-//        // customer picked the one to pay
-//        CryptoCurrency pickedCrypto = payment.getCryptoCurrency(cryptocurrency.getId());
 
         // confirm the payment with chosen cryptocurrency
         PaymentConfirmParams confirmParams =
@@ -111,11 +111,18 @@ public class Main {
         }
 
         // retrieve payment history
+
+
+        Instant now = Instant.now();
+
+        // Calculate the time 10 days ago
+        Instant tenDaysAgo = now.minus(10, ChronoUnit.DAYS);
         ListParams listParams =
                 ListParams
                         .builder()
                         .setLimit(10L)
-                        .setEndingBefore(payment.getId()) //payment.getId()
+                        .setCreatedFrom(tenDaysAgo.getEpochSecond())
+//                        .setEndingBefore(payment.getId()) //payment.getId()
                         .build();
 
         try {
@@ -126,23 +133,29 @@ public class Main {
         }
     }
 
-    private static void payoutProcess(LokoClient client, Customer customer) {
+    private static void payoutProcess(LokoClient client) {
         // ============ start payout process ============
         System.out.println("============ start payout process ============");
 
         // setup customer wallet info
-        customer.setDestinationCurrency("USDC");
-        customer.setDestinationNetwork("Ethereum");
-        customer.setDestinationAddress("0x1aBB9515E78C516AFC1A6F2222401da183654d67");
+        CustomerParams customerParams =
+                CustomerParams
+                        .builder()
+                        .setId("0123456")
+                        .setEmail("ryo@lokopay.io")
+                        .setDestinationCurrency("USDC")
+                        .setDestinationNetwork("Ethereum")
+                        .setDestinationAddress("0x1aBB9515E78C516AFC1A6F2222401da183654d67")
+                        .build();
 
         // create payout params
         PayoutCreateParams payoutParams =
                 PayoutCreateParams
                         .builder()
                         .setAmount("2000")
-//                        .setCurrency("USDC")
+                        .setCurrency("USDC")
                         .setDescription("withdraw #1234")
-                        .setCustomer(customer)
+                        .setCustomer(customerParams)
                         .build();
 
         // create a new payout
@@ -155,8 +168,6 @@ public class Main {
             System.out.println("error code: " + e.getCode());
             System.out.println("error message: " + e.getMessage());
             return;
-//            e.getCode();
-//            e.printStackTrace();
         }
 
         // retrieve the payout for network fee

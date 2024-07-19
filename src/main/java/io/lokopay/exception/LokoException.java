@@ -36,7 +36,7 @@ public class LokoException extends Exception{
      */
     private Integer statusCode;
 
-    protected LokoException(
+    public LokoException(
             String message,
 //            String requestId,
             String code, Integer statusCode) {

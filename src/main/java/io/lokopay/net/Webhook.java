@@ -2,6 +2,7 @@ package io.lokopay.net;
 
 import io.lokopay.exception.SignatureVerificationException;
 import io.lokopay.model.Event;
+import io.lokopay.util.Security;
 import io.lokopay.util.StringUtils;
 import io.lokopay.model.LokoObject;
 
@@ -130,11 +131,6 @@ public final class Webhook {
       String nonce = getNonce(sigHeader);
       String signature = getSignatures(sigHeader);
 
-      System.out.println("timestamp: " + timestamp);
-      System.out.println("nonce: " + nonce);
-      System.out.println("signature: " + signature);
-      System.out.println("url: " + url);
-      System.out.println("payload: " + payload);
       if (timestamp <= 0) {
         throw new SignatureVerificationException(
             "Unable to extract timestamp and signatures from header", sigHeader);
@@ -236,36 +232,38 @@ public final class Webhook {
      * @return the signature as a string.
      */
     private static String computeSignature(String payload, String secret)
-        throws NoSuchAlgorithmException, InvalidKeyException {
-      return Util.computeHmacSha256(secret, payload);
+        throws Exception {
+//      return Util.computeHmacSha256(secret, payload);
+
+      return Security.HmacSignature(payload, secret);
     }
   }
 
   public static final class Util {
-    /**
-     * Computes the HMAC/SHA-256 code for a given key and message.
-     *
-     * @param key the key used to generate the code.
-     * @param message the message.
-     * @return the code as a string.
-     */
-    public static String computeHmacSha256(String key, String message)
-        throws NoSuchAlgorithmException, InvalidKeyException {
-
-      System.out.println("data: " + message);
-      Mac mac = Mac.getInstance("HmacSHA256");
-      SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-      mac.init(secretKeySpec);
-
-      byte[] hmacBytes = mac.doFinal(message.getBytes());
-//      hasher.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-//      byte[] hash = hasher.doFinal(message.getBytes(StandardCharsets.UTF_8));
-//      String result = "";
-//      for (byte b : hash) {
-//        result += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
-//      }
-      return Base64.getEncoder().encodeToString(hmacBytes);
-    }
+//    /**
+//     * Computes the HMAC/SHA-256 code for a given key and message.
+//     *
+//     * @param key the key used to generate the code.
+//     * @param message the message.
+//     * @return the code as a string.
+//     */
+//    public static String computeHmacSha256(String key, String message)
+//        throws NoSuchAlgorithmException, InvalidKeyException {
+//
+//      System.out.println("data: " + message);
+//      Mac mac = Mac.getInstance("HmacSHA256");
+//      SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+//      mac.init(secretKeySpec);
+//
+//      byte[] hmacBytes = mac.doFinal(message.getBytes());
+////      hasher.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+////      byte[] hash = hasher.doFinal(message.getBytes(StandardCharsets.UTF_8));
+////      String result = "";
+////      for (byte b : hash) {
+////        result += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
+////      }
+//      return Base64.getEncoder().encodeToString(hmacBytes);
+//    }
 
     /**
      * Returns the current UTC timestamp in seconds.

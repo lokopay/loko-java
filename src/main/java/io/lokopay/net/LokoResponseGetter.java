@@ -28,8 +28,13 @@ public class LokoResponseGetter implements ResponseGetter {
     }
 
     public LokoResponseGetter(LokoResponseGetterOptions options, HttpClient httpClient) {
+
         this.options = options != null ? options : GlobalLokoResponseGetterOptions.INSTANCE;
         this.httpClient = (httpClient != null) ? httpClient : buildDefaultHttpClient();
+    }
+
+    public String getSecrityKey() {
+        return this.options.getApiSecretKey();
     }
 
     private LokoRequest toLokoRequest(ApiRequest apiRequest, RequestOptions mergedOptions)

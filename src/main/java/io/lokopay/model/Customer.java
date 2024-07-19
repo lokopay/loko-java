@@ -1,14 +1,11 @@
 package io.lokopay.model;
 
 import com.google.gson.annotations.SerializedName;
-import io.lokopay.exception.LokoException;
 import io.lokopay.net.ApiResource;
-import io.lokopay.net.RequestOptions;
+import io.lokopay.util.Security;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -24,6 +21,7 @@ public class Customer extends ApiResource implements HasId {
     @SerializedName("email")
     String email;
 
+    @EncryptableField
     @SerializedName("destination_address")
     String destinationAddress;
 
@@ -32,4 +30,8 @@ public class Customer extends ApiResource implements HasId {
 
     @SerializedName("destination_currency")
     String destinationCurrency;
+
+//    public void setDestinationAddress(String destinationAddress, String key) throws Exception {
+//        this.destinationAddress = Security.AESEncrypt(destinationAddress, key);
+//    }
 }

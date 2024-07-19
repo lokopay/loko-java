@@ -1,30 +1,33 @@
 package io.lokopay.net;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.net.URL;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.time.Instant;
 import java.util.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.lokopay.Loko;
 import io.lokopay.exception.ApiConnectionException;
 import io.lokopay.exception.AuthenticationException;
 import io.lokopay.exception.LokoException;
+import io.lokopay.model.Customer;
+import io.lokopay.model.EncryptableField;
+import io.lokopay.model.EncryptableFieldSerializer;
+import io.lokopay.util.Security;
 import io.lokopay.util.StringUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 @Value
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(fluent = true)
 public class LokoRequest {
+
     ApiResource.RequestMethod method;
 
     URL url;
@@ -55,6 +58,7 @@ public class LokoRequest {
 
         try {
 
+//            encryptParams(params, options);
             this.params = (params != null) ? Collections.unmodifiableMap(params) : null;
             this.options = (options != null) ? options : RequestOptions.getDefault();
             this.method = method;
@@ -63,7 +67,7 @@ public class LokoRequest {
             this.signature = buildSignature(method, this.url.toString(), this.params, this.nonce, this.timestamp, this.options);
             this.headers = buildHeaders(method, this.options, this.signature, this.timestamp, this.nonce);
 
-        } catch (NoSuchAlgorithmException | InvalidKeyException | IOException e) {
+        } catch (Exception e) {
             throw new ApiConnectionException(
                     String.format(
                             "IOException during API request to Loko (%s): %s",
@@ -165,7 +169,7 @@ public class LokoRequest {
             String nonce,
             long timestamp,
             RequestOptions options
-    ) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+    ) throws Exception {
 
         String content = "";
         if (params != null && method != ApiResource.RequestMethod.GET) {
@@ -174,12 +178,6 @@ public class LokoRequest {
 
         String data = url + content + nonce + timestamp;
 
-        Mac mac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretKeySpec = new SecretKeySpec(options.getApiSecretKey().getBytes(), "HmacSHA256");
-        mac.init(secretKeySpec);
-
-        byte[] hmacBytes = mac.doFinal(data.getBytes());
-
-        return Base64.getEncoder().encodeToString(hmacBytes);
+        return Security.HmacSignature(data, options.getApiSecretKey());
     }
 }

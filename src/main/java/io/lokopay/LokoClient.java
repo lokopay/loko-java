@@ -170,7 +170,6 @@ public class LokoClient {
             }
 
             return new ClientLokoResponseGetterOptions(
-//                    this.apiKey,
                     this.apiSecretKey,
                     this.apiPublicKey,
                     connectTimeout,

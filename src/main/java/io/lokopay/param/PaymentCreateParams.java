@@ -18,13 +18,13 @@ public class PaymentCreateParams extends ApiRequestParams {
     String description;
 
     @SerializedName("customer")
-    Customer customer;
+    CustomerParams customer;
 
     private PaymentCreateParams(
             String amount,
             String currency,
             String description,
-            Customer customer
+            CustomerParams customer
     ) {
         this.amount = amount;
         this.currency = currency;
@@ -44,7 +44,7 @@ public class PaymentCreateParams extends ApiRequestParams {
 
         private String description;
 
-        private Customer customer;
+        private CustomerParams customer;
 
         public PaymentCreateParams build() {
             return new PaymentCreateParams(
@@ -70,7 +70,7 @@ public class PaymentCreateParams extends ApiRequestParams {
             return this;
         }
 
-        public Builder setCustomer(Customer customer) {
+        public Builder setCustomer(CustomerParams customer) {
             this.customer = customer;
             return this;
         }

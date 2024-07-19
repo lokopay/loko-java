@@ -62,5 +62,4 @@ public class Payout extends ApiResource implements HasId {
     public Customer getCustomer() {
         return (this.customer != null) ? this.customer.getExpanded() : null;
     }
-
 }
