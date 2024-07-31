@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Events are our way of letting you know when something interesting happens in your account. When
@@ -206,6 +207,13 @@ public class Event extends ApiResource implements HasId {
   @SerializedName("type")
   String type;
 
+  @Setter
+  @Getter
+  private String secretKey;
+
+  private EventDataObjectDeserializer eventDataObjectDeserializer;
+
+
   /**
    * List events, going back up to 30 days. Each event data is rendered according to Loko API
    * version at its creation time, specified in <a
@@ -329,8 +337,34 @@ public class Event extends ApiResource implements HasId {
    * {@link EventDataObjectDeserializer#deserializeUnsafe()}.
    */
   public EventDataObjectDeserializer getDataObjectDeserializer() {
-//    return new EventDataObjectDeserializer(apiVersion, type, data.object, getResponseGetter());
+
     return new EventDataObjectDeserializer(apiVersion, type, data, getResponseGetter());
+  }
+
+  public Boolean hasObject() {
+
+    if (this.eventDataObjectDeserializer == null) {
+      this.eventDataObjectDeserializer = new EventDataObjectDeserializer(apiVersion, type, data, getResponseGetter());
+    }
+
+    return this.eventDataObjectDeserializer.getObject().isPresent();
+  }
+
+  public LokoObject getLokoObject() {
+    if (this.eventDataObjectDeserializer == null) {
+      return null;
+    }
+
+    Optional<LokoObject> lokoObject = this.eventDataObjectDeserializer.getObject();
+
+    if (lokoObject.isPresent()) {
+      LokoObject lo = lokoObject.get();
+
+      LokoObject.decryptLokoObject(lo, this.secretKey);
+      return lo;
+    } else {
+      return null;
+    }
   }
 
   @Getter

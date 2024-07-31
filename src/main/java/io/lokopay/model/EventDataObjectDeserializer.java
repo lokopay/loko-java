@@ -130,6 +130,7 @@ public class EventDataObjectDeserializer {
 //    }
 
     object = LokoObject.deserializeLokoObject(rawJsonObject, this.responseGetter);
+
     return true;
   }
 

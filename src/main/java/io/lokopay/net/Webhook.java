@@ -35,9 +35,9 @@ public final class Webhook {
    * @return the Event instance
    * @throws SignatureVerificationException if the verification fails.
    */
-  public static Event constructEvent(String requestUrl, String payload, String sigHeader, String secret)
+  public static Event constructEvent(String requestUrl, String payload, String sigHeader, String secretKey)
       throws SignatureVerificationException {
-    return constructEvent(requestUrl, payload, sigHeader, secret, DEFAULT_TOLERANCE);
+    return constructEvent(requestUrl, payload, sigHeader, secretKey, DEFAULT_TOLERANCE);
   }
 
 //  /**
@@ -81,6 +81,8 @@ public final class Webhook {
             payload, Event.class, ApiResource.getGlobalResponseGetter());
 
     Signature.verifyHeader(requestUrl, payload, sigHeader, secretKey, tolerance);
+
+    event.setSecretKey(secretKey);
 
     return event;
   }
@@ -145,8 +147,6 @@ public final class Webhook {
       String expectedSignature;
       try {
         expectedSignature = computeSignature(signedPayload, secret);
-        System.out.println("expected signature: " + expectedSignature);
-
       } catch (Exception e) {
         throw new SignatureVerificationException(
             "Unable to compute signature for payload", sigHeader);

@@ -16,6 +16,8 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.println("Hello and welcome!");
 
+        System.out.println("!");
+
         // initial loko client
         LokoClient client = new LokoClient(
                 false,
@@ -116,24 +118,24 @@ public class Main {
         // retrieve payment history
 
 
-        Instant now = Instant.now();
-
-        // Calculate the time 10 days ago
-        Instant tenDaysAgo = now.minus(10, ChronoUnit.DAYS);
-        ListParams listParams =
-                ListParams
-                        .builder()
-                        .setLimit(10L)
-                        .setCreatedFrom(tenDaysAgo.getEpochSecond())
-//                        .setEndingBefore(payment.getId()) //payment.getId()
-                        .build();
-
-        try {
-            LokoCollection<Payment> payments = client.payments().list(listParams);
-            System.out.println("Payments: " + payments);
-        } catch (LokoException e) {
-            e.printStackTrace();
-        }
+//        Instant now = Instant.now();
+//
+//        // Calculate the time 10 days ago
+//        Instant tenDaysAgo = now.minus(10, ChronoUnit.DAYS);
+//        ListParams listParams =
+//                ListParams
+//                        .builder()
+//                        .setLimit(10L)
+//                        .setCreatedFrom(tenDaysAgo.getEpochSecond())
+////                        .setEndingBefore(payment.getId()) //payment.getId()
+//                        .build();
+//
+//        try {
+//            LokoCollection<Payment> payments = client.payments().list(listParams);
+//            System.out.println("Payments: " + payments);
+//        } catch (LokoException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static void payoutProcess(LokoClient client) {
