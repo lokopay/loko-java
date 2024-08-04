@@ -20,12 +20,15 @@ public class CryptoCurrency extends ApiResource implements HasId{
     @SerializedName("price_pair")
     String pair;
 
-    @SerializedName("network")
-    String network;
-
     @SerializedName("amount")
     String amount;
 
     @SerializedName("currency")
     String currency;
+
+    @SerializedName("network")
+    String network;
+
+    @SerializedName("description")
+    String description;
 }

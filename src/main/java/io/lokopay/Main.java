@@ -26,6 +26,7 @@ public class Main {
         );
 
 
+//        customerWalletProcess(client);
         paymentProcess(client);
 //        payoutProcess(client);
 //        networkfeeProcess(client);
@@ -33,6 +34,32 @@ public class Main {
 
 
         System.out.println("============ end of process ============");
+    }
+
+    private static void customerWalletProcess(LokoClient client) {
+
+        CustomerParams customerParams =
+                CustomerParams
+                        .builder()
+                        .setId("lk_00000008")
+                        .setEmail("ryo@lokofi.io")
+                        .build();
+
+        CustomerWalletCreateParams params =
+                CustomerWalletCreateParams
+                        .builder()
+                        .setCurrency("ETH")
+                        .setNetwork("Ethereum")
+                        .setCustomer(customerParams)
+                        .build();
+
+        try {
+            CustomerWallet wallet = client.customerWallets().create(params);
+            System.out.println("Created wallet: " + wallet);
+
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void paymentProcess(LokoClient client) {

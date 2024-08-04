@@ -39,13 +39,16 @@ public class ApiResourceDecryptor {
                 if (field.isAnnotationPresent(EncryptableField.class)) {
                     field.setAccessible(true);
 
-                    String encryptedText = field.get(lokoObject).toString();
-                    String decryptedText = "";
-                    if (encryptedText != null && !encryptedText.isEmpty()) {
-                        decryptedText = Security.AESDecrypt(encryptedText, key);
+                    if(field.get(lokoObject) != null) {
+                        String encryptedText = field.get(lokoObject).toString();
+                        String decryptedText = "";
+                        if (encryptedText != null && !encryptedText.isEmpty()) {
+                            decryptedText = Security.AESDecrypt(encryptedText, key);
+                        }
+
+                        field.set(lokoObject, decryptedText);
                     }
 
-                    field.set(lokoObject, decryptedText);
                 }
 
             }

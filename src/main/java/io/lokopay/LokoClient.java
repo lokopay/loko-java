@@ -40,6 +40,10 @@ public class LokoClient {
         return new io.lokopay.service.NetworkFeeService(this.responseGetter);
     }
 
+    public io.lokopay.service.CustomerWalletService customerWallets() {
+        return new io.lokopay.service.CustomerWalletService(this.responseGetter);
+    }
+
     static class ClientLokoResponseGetterOptions extends LokoResponseGetterOptions {
 
         @Getter(onMethod_ = {@Override})
