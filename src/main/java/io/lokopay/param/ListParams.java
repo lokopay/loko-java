@@ -8,30 +8,41 @@ public class ListParams extends ApiRequestParams {
     @SerializedName("limit")
     private Long limit;
 
+    @SerializedName("starting_after")
+    private String startingAfter;
+
+    @SerializedName("ending_before")
+    private String endingBefore;
+
     @SerializedName("created_from")
     private Long createdFrom;
 
     @SerializedName("created_to")
     private Long createdTo;
 
-    @SerializedName("ending_before")
-    private String endingBefore;
+    @SerializedName("completed_from")
+    private Long completedFrom;
 
-    @SerializedName("starting_after")
-    private String startingAfter;
+    @SerializedName("completed_to")
+    private Long completedTo;
 
     private ListParams(
             Long limit,
+            String startingAfter,
+            String endingBefore,
             Long createdFrom,
             Long createdTo,
-            String endingBefore,
-            String startingAfter
+            Long completedFrom,
+            Long completedTo
+
     ) {
         this.limit = limit;
+        this.startingAfter = startingAfter;
+        this.endingBefore = endingBefore;
         this.createdFrom = createdFrom;
         this.createdTo = createdTo;
-        this.endingBefore = endingBefore;
-        this.startingAfter = startingAfter;
+        this.completedFrom = completedFrom;
+        this.completedTo = completedTo;
     }
 
     public static Builder builder() {
@@ -42,26 +53,42 @@ public class ListParams extends ApiRequestParams {
 
         private Long limit;
 
+        private String startingAfter;
+
+        private String endingBefore;
+
         private Long createdFrom;
 
         private Long createdTo;
 
-        private String endingBefore;
+        private Long completedFrom;
 
-        private String startingAfter;
+        private Long completedTo;
 
         public ListParams build() {
             return new ListParams(
                     this.limit,
+                    this.startingAfter,
+                    this.endingBefore,
                     this.createdFrom,
                     this.createdTo,
-                    this.endingBefore,
-                    this.startingAfter
+                    this.completedFrom,
+                    this.completedTo
             );
         }
 
         public Builder setLimit(Long limit) {
             this.limit = limit;
+            return this;
+        }
+
+        public Builder setStartingAfter(String startingAfter) {
+            this.startingAfter = startingAfter;
+            return this;
+        }
+
+        public Builder setEndingBefore(String endingBefore) {
+            this.endingBefore = endingBefore;
             return this;
         }
 
@@ -75,14 +102,15 @@ public class ListParams extends ApiRequestParams {
             return this;
         }
 
-        public Builder setEndingBefore(String endingBefore) {
-            this.endingBefore = endingBefore;
+        public Builder setCompletedFrom(Long completedFrom) {
+            this.completedFrom = completedFrom;
             return this;
         }
 
-        public Builder setStartingAfter(String startingAfter) {
-            this.startingAfter = startingAfter;
+        public Builder setCompletedTo(Long completedTo) {
+            this.completedTo = completedTo;
             return this;
         }
+
     }
 }

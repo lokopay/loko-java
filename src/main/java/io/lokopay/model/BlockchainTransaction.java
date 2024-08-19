@@ -38,4 +38,9 @@ public class BlockchainTransaction extends ApiResource implements HasId {
     @SerializedName("confirmations")
     Long confirmations;
 
+    @SerializedName("block_height")
+    Long blockHeight;
+
+    @SerializedName("block_time")
+    Long blockTime;
 }

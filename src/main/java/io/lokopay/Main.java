@@ -5,6 +5,8 @@ import io.lokopay.model.*;
 import io.lokopay.param.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -64,105 +66,115 @@ public class Main {
 
     private static void paymentProcess(LokoClient client) {
 
-        // ============ start payment process ============
-        System.out.println("============ start payment process ============");
-
-        CustomerParams customerParams =
-                CustomerParams
-                        .builder()
-                        .setId("0123456")
-                        .setEmail("ryo@lokopay.io")
-                        .build();
-
-        // create payment params
-        PaymentCreateParams createParams =
-                PaymentCreateParams
-                        .builder()
-                        .setAmount("10000")
-                        .setCurrency("USDC")
-                        .setDescription("Order #123")
-                        .setCustomer(customerParams)
-                        .build();
-
-        // create a new payment
-        Payment payment = new Payment();
-        try {
-            payment = client.payments().create(createParams);
-            System.out.println("payment id: " + payment.getId());
-            System.out.println("payment status: " + payment.getStatus());
-        } catch (LokoException e) {
-            e.printStackTrace();
-        }
-
-        // retrieve the payment for prices
-        try {
-
-            payment = client.payments().retrieve(payment.getId());
-            System.out.println("payment supported cryptos: " + payment.getSupportedCryptocurrencies());
-            System.out.println("payment status: " + payment.getStatus());
-
-        } catch (LokoException e) {
-            e.printStackTrace();
-        }
-
-
-        List<CryptoCurrency> cryptos = payment.getSupportedCryptocurrencies();
-        CryptoCurrency pickedCrypto = new CryptoCurrency();
-
-        for (CryptoCurrency cryptoCurrency : cryptos) {
-            if (cryptoCurrency.getPair().equals("USDC-USDC")) {
-                pickedCrypto = cryptoCurrency;
-                break;
-            }
-        }
-
-        // confirm the payment with chosen cryptocurrency
-        PaymentConfirmParams confirmParams =
-                PaymentConfirmParams
-                        .builder()
-                        .setCryptocurrency(pickedCrypto)
-                        .build();
-        try {
-            payment = client.payments().confirm(payment.getId(), confirmParams);
-            System.out.println("payment status: " + payment.getStatus());
-
-        } catch (LokoException e) {
-            e.printStackTrace();
-        }
-
-        // retrieve the payment for address
-        try {
-            Thread.sleep(4000);
-            payment = client.payments().retrieve(payment.getId());
-            System.out.println("payment status: " + payment.getStatus());
-            System.out.println("address: " +  payment.getCurrencyDueAddress());
-            System.out.println("payment customer: " + payment.getCustomer());
-
-        } catch (LokoException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // retrieve payment history
-
-
-//        Instant now = Instant.now();
+//        // ============ start payment process ============
+//        System.out.println("============ start payment process ============");
 //
-//        // Calculate the time 10 days ago
-//        Instant tenDaysAgo = now.minus(10, ChronoUnit.DAYS);
-//        ListParams listParams =
-//                ListParams
+//        CustomerParams customerParams =
+//                CustomerParams
 //                        .builder()
-//                        .setLimit(10L)
-//                        .setCreatedFrom(tenDaysAgo.getEpochSecond())
-////                        .setEndingBefore(payment.getId()) //payment.getId()
+//                        .setId("0123456")
+//                        .setEmail("ryo@lokopay.io")
 //                        .build();
 //
+//        // create payment params
+//        PaymentCreateParams createParams =
+//                PaymentCreateParams
+//                        .builder()
+//                        .setAmount("10000")
+//                        .setCurrency("USDC")
+//                        .setDescription("Order #123")
+//                        .setCustomer(customerParams)
+//                        .build();
+//
+//        // create a new payment
+//        Payment payment = new Payment();
 //        try {
-//            LokoCollection<Payment> payments = client.payments().list(listParams);
-//            System.out.println("Payments: " + payments);
+//            payment = client.payments().create(createParams);
+//            System.out.println("payment id: " + payment.getId());
+//            System.out.println("payment status: " + payment.getStatus());
 //        } catch (LokoException e) {
 //            e.printStackTrace();
 //        }
+//
+//        // retrieve the payment for prices
+//        try {
+//
+//            payment = client.payments().retrieve(payment.getId());
+//            System.out.println("payment supported cryptos: " + payment.getSupportedCryptocurrencies());
+//            System.out.println("payment status: " + payment.getStatus());
+//
+//        } catch (LokoException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        List<CryptoCurrency> cryptos = payment.getSupportedCryptocurrencies();
+//        CryptoCurrency pickedCrypto = new CryptoCurrency();
+//
+//        for (CryptoCurrency cryptoCurrency : cryptos) {
+//            if (cryptoCurrency.getPair().equals("USDC-USDC")) {
+//                pickedCrypto = cryptoCurrency;
+//                break;
+//            }
+//        }
+//
+//        // confirm the payment with chosen cryptocurrency
+//        PaymentConfirmParams confirmParams =
+//                PaymentConfirmParams
+//                        .builder()
+//                        .setCryptocurrency(pickedCrypto)
+//                        .build();
+//        try {
+//            payment = client.payments().confirm(payment.getId(), confirmParams);
+//            System.out.println("payment status: " + payment.getStatus());
+//
+//        } catch (LokoException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // retrieve the payment for address
+//        try {
+//            Thread.sleep(4000);
+//            payment = client.payments().retrieve(payment.getId());
+//            System.out.println("payment status: " + payment.getStatus());
+//            System.out.println("address: " +  payment.getCurrencyDueAddress());
+//            System.out.println("payment customer: " + payment.getCustomer());
+//
+//        } catch (LokoException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        // retrieve payment history
+
+        LocalDateTime specificDateTime = LocalDateTime.of(2024, 8, 13, 12, 0, 0);
+
+        // Convert to EpochSecond (UTC)
+        long epochSecond = specificDateTime.toEpochSecond(ZoneOffset.UTC);
+//
+//
+//        currentCheckTime.toEpochSecond(ZoneOffset.UTC);
+        // Print the result
+        System.out.println("EpochSecond (UTC): " + epochSecond);
+
+        Instant now = Instant.now();
+
+        // Calculate the time 10 days ago
+        Instant tenDaysAgo = now.minus(10, ChronoUnit.DAYS);
+        ListParams listParams =
+                ListParams
+                        .builder()
+                        .setLimit(2L)
+                        .setCompletedFrom(epochSecond)
+//                        .setCreatedFrom(epochSecond)
+//                        .setEndingBefore(payment.getId()) //payment.getId()
+                        .build();
+
+        try {
+            LokoCollection<Payment> payments = client.payments().list(listParams);
+            System.out.println("Payments: " + payments);
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void payoutProcess(LokoClient client) {
