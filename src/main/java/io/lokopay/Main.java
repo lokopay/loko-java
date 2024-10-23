@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -23,14 +24,15 @@ public class Main {
         // initial loko client
         LokoClient client = new LokoClient(
                 false,
-                "gKpGuaGYxDmcsGwqbEnXSeWcJwYUKsjW",
-                "mGGvXEfkVrFMQQDhcGCqNyOMcKWjWyIV"
+                "xSJ/2AteaZT4bEw5VY7bgJ6vImNJVdWqS0UtCZ9epZgs1KsiTE6CKwmiGnj2v6b/MWo9vnBxJVLEyQn/IRSX5A==",
+                "owgX7UqW96sxaG/3KF6L+SzWy2kWPCcUm67tem+MDB4="
+
         );
 
 
 //        customerWalletProcess(client);
-        paymentProcess(client);
-//        payoutProcess(client);
+//        paymentProcess(client);
+        payoutProcess(client);
 //        networkfeeProcess(client);
 
 
@@ -181,6 +183,19 @@ public class Main {
         // ============ start payout process ============
         System.out.println("============ start payout process ============");
 
+//         List<BlockchainNetwork> details = new ArrayList<BlockchainNetwork>();
+//        try {
+//            NetworkFee networkFees = client.networkFees().list();
+//            System.out.println(networkFees.getDestinationNetworkDetails());
+//            details = networkFees.getDestinationNetworkDetails();
+//        } catch (LokoException e) {
+//            e.printStackTrace();
+//        }
+
+//        for ( BlockchainNetwork fee : details){
+//            System.out.println(fee.toString());
+//        }
+
         // setup customer wallet info
         CustomerParams customerParams =
                 CustomerParams
@@ -200,7 +215,10 @@ public class Main {
                         .setCurrency("USDC")
                         .setDescription("withdraw #1234")
                         .setCustomer(customerParams)
+                        .setTransferNativeToken(true)
                         .build();
+
+//        TransferWithNativeToken nativeTokenParams = TransferWithNativeToken
 
         // create a new payout
         Payout payout = new Payout();
@@ -233,17 +251,17 @@ public class Main {
         }
 
         // pick the network want to receive crypto, for now always the USDC
-        BlockchainNetwork network = payout.getDestinationNetworkDetails().get(0);
+        List<BlockchainNetwork> details = payout.getDestinationNetworkDetails();
 
-        System.out.println("network_detail: " + network);
+        System.out.println("network_detail: " + details);
         // confirm the payout
-//        PayoutConfirmParams confirmPayoutParams =
-//                PayoutConfirmParams
-//                        .builder()
-//                        .setDestinationNetworkDetail(network)
-//                        .build();
-//
-//        //or set with following
+        PayoutConfirmParams confirmPayoutParams =
+                PayoutConfirmParams
+                        .builder()
+                        .setDestinationNetworkDetails(details)
+                        .build();
+
+        //or set with following
 //        PayoutConfirmParams confirmParams =
 //                PayoutConfirmParams
 //                        .builder()
@@ -255,22 +273,22 @@ public class Main {
 //                        .setNetworkFeeCurrency(network.getDestinationNetworkFeeCurrency())
 //                        .setNetworkFeeMonetary(network.getDestinationNetworkFeeMonetary())
 //                        .build();
-//
-//        try {
-//            payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);
-//        } catch (LokoException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // retrieve the payout for network fee
-//        try {
-//            Thread.sleep(4000);
-//            payout = client.payouts().retrieve(payout.getId());
-//            System.out.println("payout status: " + payout.getStatus());
-//
-//        } catch (LokoException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
+        try {
+            payout = client.payouts().confirm(payout.getId(), confirmPayoutParams);
+        } catch (LokoException e) {
+            e.printStackTrace();
+        }
+
+        // retrieve the payout for network fee
+        try {
+            Thread.sleep(4000);
+            payout = client.payouts().retrieve(payout.getId());
+            System.out.println("payout status: " + payout.getStatus());
+
+        } catch (LokoException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void networkfeeProcess(LokoClient client) {

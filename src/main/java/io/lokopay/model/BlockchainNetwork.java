@@ -23,6 +23,18 @@ public class BlockchainNetwork extends ApiResource implements HasId {
     @SerializedName("destination_network")
     String destinationNetwork;
 
+    @SerializedName("destination_transaction_fee_fixed")
+    String destinationTransactionFeeFixed;
+
+    @SerializedName("destination_transaction_fee_percentage")
+    String destinationTransactionFeePercentage;
+
+    @SerializedName("destination_transaction_fee_type")
+    String destinationTransactionFeeType;
+
+    @SerializedName("destination_transaction_fee_currency")
+    String destinationTransactionFeeCurrency;
+
     @SerializedName("destination_network_fee")
     String destinationNetworkFee;
 
@@ -31,4 +43,7 @@ public class BlockchainNetwork extends ApiResource implements HasId {
 
     @SerializedName("destination_network_fee_monetary")
     String destinationNetworkFeeMonetary;
+
+    @SerializedName("transfer_with_native_token")
+    TransferWithNativeToken transferWithNativeToken;
 }
